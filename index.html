@@ -120,7 +120,7 @@
             padding: 30px 20px;
         }
         #start-screen {
-            background: transparent; /* Lässt den animierten Canvas-Hintergrund durchscheinen */
+            background: transparent;
         }
         .menu-content {
             position: relative;
@@ -324,7 +324,7 @@
 <body>
 
     <div id="game-container">
-        <!-- Fade Overlay für sanfte Übergänge -->
+        <!-- Fade Overlay -->
         <div id="fade-overlay"></div>
 
         <!-- Ingame UI HUD -->
@@ -888,7 +888,6 @@
             if (keys['a'] || keys['arrowleft']) moveX = -1;
             if (keys['d'] || keys['arrowright']) moveX = 1;
 
-            // Schwammige Trägheitssteuerung
             player.vx += (moveX * player.speed - player.vx) * 0.12;
             player.vy += (moveY * player.speed - player.vy) * 0.12;
 
@@ -902,6 +901,7 @@
             player.x = Math.max(player.radius, Math.min(worldWidth - player.radius, player.x));
             player.y = Math.max(player.radius, Math.min(worldHeight - player.radius, player.y));
 
+            // KUGEL-UPDATE
             for (let i = bullets.length - 1; i >= 0; i--) {
                 let b = bullets[i];
                 b.x += b.dx; b.y += b.dy;
@@ -941,6 +941,7 @@
                 }
             }
 
+            // GEGNER-KI BEWEGUNG UND ANGRIFF (SCHIESSEN)
             for (let i = enemies.length - 1; i >= 0; i--) {
                 let en = enemies[i];
                 let distToPlayer = Math.hypot(player.x - en.x, player.y - en.y);
@@ -972,18 +973,33 @@
                 en.x = Math.max(en.radius, Math.min(worldWidth - en.radius, en.x));
                 en.y = Math.max(en.radius, Math.min(worldHeight - en.radius, en.y));
 
+                // --- HIER IST DER WIEDERHERGESTELLTE ANGRIFFS-BLOCK ---
                 en.shootCooldown--;
                 if (en.shootCooldown <= 0) {
-                    en.shootCooldown = Math.random() * 60 + 30;
+                    en.shootCooldown = Math.random() * 40 + en.classConfig.fireRate;
                     if (hasLOS) {
-                        let shootAngle = angleToTarget + (Math.random() - 0.5) * 0.3;
-                        bullets.push({
-                            x: en.x, y: en.y,
-                            dx: Math.cos(shootAngle) * en.classConfig.bulletSpeed,
-                            dy: Math.sin(shootAngle) * en.classConfig.bulletSpeed,
-                            radius: en.classConfig.bulletSize, color: "#ff9900",
-                            fromPlayer: false, shooterIndex: i
-                        });
+                        let cfg = en.classConfig;
+                        if (cfg.id === 'shotgun') {
+                            for (let spread of [-0.25, 0, 0.25]) {
+                                let shootAngle = angleToTarget + spread + (Math.random() - 0.5) * 0.1;
+                                bullets.push({
+                                    x: en.x, y: en.y,
+                                    dx: Math.cos(shootAngle) * cfg.bulletSpeed,
+                                    dy: Math.sin(shootAngle) * cfg.bulletSpeed,
+                                    radius: cfg.bulletSize, color: en.color,
+                                    fromPlayer: false, shooterIndex: i
+                                });
+                            }
+                        } else {
+                            let shootAngle = angleToTarget + (Math.random() - 0.5) * 0.2;
+                            bullets.push({
+                                x: en.x, y: en.y,
+                                dx: Math.cos(shootAngle) * cfg.bulletSpeed,
+                                dy: Math.sin(shootAngle) * cfg.bulletSpeed,
+                                radius: cfg.bulletSize, color: en.color,
+                                fromPlayer: false, shooterIndex: i
+                            });
+                        }
                     }
                 }
             }
