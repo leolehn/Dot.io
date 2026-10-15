@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Blob Arena - Mobile Portrait</title>
+    <title>Blob Arena - Taktische Edition</title>
     <style>
         * {
             box-sizing: border-box;
@@ -34,6 +34,7 @@
             align-items: center;
             justify-content: center;
             overflow: hidden;
+            cursor: crosshair;
         }
         canvas {
             display: block;
@@ -61,7 +62,6 @@
             border-radius: 10px;
             backdrop-filter: blur(5px);
         }
-        /* Pause-Button Oben Mittig */
         #pause-btn {
             position: absolute;
             top: 15px;
@@ -82,7 +82,6 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.4);
             pointer-events: auto;
         }
-        /* Menüs & Overlays */
         .screen {
             position: absolute;
             top: 0;
@@ -97,6 +96,7 @@
             text-align: center;
             z-index: 20;
             padding: 30px;
+            cursor: default;
         }
         .screen h1 {
             color: #00f3ff;
@@ -129,7 +129,6 @@
             border: 2px solid #475569;
             box-shadow: 0 4px 15px rgba(0,0,0,0.3);
         }
-        /* End-Screen Buttons Container */
         .end-buttons {
             display: flex;
             gap: 15px;
@@ -148,18 +147,9 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.4);
             pointer-events: auto;
         }
-        #retry-btn {
-            background: #10b981;
-            color: #fff;
-        }
-        #home-btn {
-            background: #6366f1;
-            color: #fff;
-        }
-        /* Shop Styling */
-        #shop-screen {
-            display: none;
-        }
+        #retry-btn { background: #10b981; color: #fff; }
+        #home-btn { background: #6366f1; color: #fff; }
+        #shop-screen { display: none; }
         .shop-list {
             width: 100%;
             max-height: 380px;
@@ -179,36 +169,13 @@
             justify-content: space-between;
             align-items: center;
         }
-        .shop-info h3 {
-            margin: 0 0 4px 0;
-            font-size: 16px;
-            color: #f8fafc;
-            text-align: left;
-        }
-        .shop-info p {
-            margin: 0;
-            font-size: 12px;
-            color: #94a3b8;
-            text-align: left;
-        }
+        .shop-info h3 { margin: 0 0 4px 0; font-size: 16px; color: #f8fafc; text-align: left; }
+        .shop-info p { margin: 0; font-size: 12px; color: #94a3b8; text-align: left; }
         .buy-btn {
-            background: #f59e0b;
-            color: #000;
-            border: none;
-            padding: 8px 16px;
-            font-weight: bold;
-            border-radius: 8px;
-            cursor: pointer;
+            background: #f59e0b; color: #000; border: none; padding: 8px 16px; font-weight: bold; border-radius: 8px; cursor: pointer;
         }
-        .buy-btn.equipped {
-            background: #10b981;
-            color: #fff;
-        }
-        .buy-btn.locked {
-            background: #3b82f6;
-            color: #fff;
-        }
-        /* Mobile Touch Controls */
+        .buy-btn.equipped { background: #10b981; color: #fff; }
+        .buy-btn.locked { background: #3b82f6; color: #fff; }
         #mobile-controls {
             position: absolute;
             bottom: 30px;
@@ -224,63 +191,33 @@
             display: none;
         }
         .control-pad {
-            width: 100px;
-            height: 100px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-            position: relative;
-            pointer-events: auto;
+            width: 100px; height: 100px; background: rgba(255, 255, 255, 0.05); border: 2px solid rgba(255, 255, 255, 0.2); border-radius: 50%; position: relative; pointer-events: auto;
         }
         .control-knob {
-            width: 44px;
-            height: 44px;
-            background: rgba(0, 243, 255, 0.7);
-            border-radius: 50%;
-            position: absolute;
-            top: 26px;
-            left: 26px;
-            pointer-events: none;
-            box-shadow: 0 0 12px #00f3ff;
+            width: 44px; height: 44px; background: rgba(0, 243, 255, 0.7); border-radius: 50%; position: absolute; top: 26px; left: 26px; pointer-events: none; box-shadow: 0 0 12px #00f3ff;
         }
         #fire-btn {
-            width: 90px;
-            height: 90px;
-            background: rgba(255, 51, 102, 0.3);
-            border: 2px solid #ff3366;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #ff3366;
-            font-weight: bold;
-            font-size: 15px;
-            pointer-events: auto;
-            box-shadow: 0 0 15px rgba(255,51,102,0.4);
+            width: 90px; height: 90px; background: rgba(255, 51, 102, 0.3); border: 2px solid #ff3366; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #ff3366; font-weight: bold; font-size: 15px; pointer-events: auto; box-shadow: 0 0 15px rgba(255,51,102,0.4);
         }
     </style>
 </head>
 <body>
 
     <div id="game-container">
-        <!-- UI im Spiel -->
         <div id="ui-overlay">
             <div class="stat-box">Spieler übrig: <span id="remaining-players" style="color: #00f3ff;">0</span></div>
             <div class="stat-box">Kills: <span id="kill-count" style="color: #10b981;">0</span></div>
         </div>
 
-        <!-- Pause-Button oben mittig -->
         <button id="pause-btn" onclick="togglePause()">⏸</button>
 
-        <!-- Hauptmenü -->
         <div id="start-screen" class="screen">
             <h1>BLOB ARENA</h1>
-            <p>Überlebe das FFA-Gefecht und schalte krasse Skins frei!<br><br>Coins: <span id="menu-coins" style="color: #f59e0b; font-weight: bold;">0</span> 🪙</p>
+            <p>Taktische Bots, bunte Gegner & Diep.io-Maus-Aiming!<br><br>Coins: <span id="menu-coins" style="color: #f59e0b; font-weight: bold;">0</span> 🪙</p>
             <button class="btn" onclick="startGame()">SPIEL STARTEN</button>
             <button class="btn btn-secondary" onclick="openShop()">SHOP</button>
         </div>
 
-        <!-- Shop Menü -->
         <div id="shop-screen" class="screen">
             <h1>SKIN SHOP</h1>
             <p>Deine Coins: <span id="shop-coins-display" style="color: #f59e0b; font-weight: bold;">0</span> 🪙</p>
@@ -288,7 +225,6 @@
             <button class="btn btn-secondary" onclick="closeShop()">ZURÜCK</button>
         </div>
 
-        <!-- Pause Menü -->
         <div id="pause-screen" class="screen" style="display: none;">
             <h1>PAUSE</h1>
             <button class="btn" onclick="resumeGame()">Weiter spielen</button>
@@ -297,7 +233,6 @@
             <button class="btn btn-secondary" onclick="goHome()">Hauptmenü</button>
         </div>
 
-        <!-- End-Screen -->
         <div id="end-screen" class="screen" style="display: none;">
             <h1 id="end-title">GAME OVER</h1>
             <p id="end-message">Du wurdest besiegt!</p>
@@ -341,6 +276,8 @@
             galaxy_void: { name: "Galaxy Void", price: 400, color: "#3b82f6", secondary: "#ec4899", type: "legendary" }
         };
 
+        const enemyColors = ["#ff3366", "#f97316", "#a855f7", "#ec4899", "#84cc16", "#06b6d4", "#eab308"];
+
         function updateCoinDisplay() {
             document.getElementById("menu-coins").innerText = coins;
             document.getElementById("shop-coins-display").innerText = coins;
@@ -354,6 +291,127 @@
         const worldWidth = 900;
         const worldHeight = 1200;
 
+        const mapsList = [
+            [
+                {type: 'water', x: 250, y: 300, w: 120, h: 120, r: 25},
+                {type: 'water', x: 530, y: 750, w: 120, h: 120, r: 25},
+                {type: 'wall', x: 150, y: 550, w: 250, h: 20},
+                {type: 'wall', x: 500, y: 350, w: 20, h: 250}
+            ],
+            [
+                {type: 'water', x: 380, y: 520, w: 140, h: 140, r: 30},
+                {type: 'wall', x: 200, y: 250, w: 20, h: 300},
+                {type: 'wall', x: 680, y: 650, w: 20, h: 300},
+                {type: 'water', x: 150, y: 850, w: 100, h: 100, r: 20},
+                {type: 'water', x: 650, y: 200, w: 100, h: 100, r: 20}
+            ],
+            [
+                {type: 'wall', x: 300, y: 400, w: 300, h: 20},
+                {type: 'wall', x: 300, y: 780, w: 300, h: 20},
+                {type: 'water', x: 120, y: 550, w: 100, h: 100, r: 25},
+                {type: 'water', x: 680, y: 550, w: 100, h: 100, r: 25}
+            ],
+            [
+                {type: 'water', x: 200, y: 200, w: 120, h: 120, r: 25},
+                {type: 'water', x: 580, y: 200, w: 120, h: 120, r: 25},
+                {type: 'water', x: 200, y: 880, w: 120, h: 120, r: 25},
+                {type: 'water', x: 580, y: 880, w: 120, h: 120, r: 25},
+                {type: 'wall', x: 400, y: 500, w: 100, h: 200, r: 15}
+            ],
+            [
+                {type: 'wall', x: 150, y: 350, w: 200, h: 20},
+                {type: 'wall', x: 550, y: 850, w: 200, h: 20},
+                {type: 'water', x: 380, y: 530, w: 140, h: 140, r: 35},
+                {type: 'wall', x: 440, y: 200, w: 20, h: 200},
+                {type: 'wall', x: 440, y: 800, w: 20, h: 200}
+            ],
+            [
+                {type: 'water', x: 250, y: 450, w: 100, h: 250, r: 30},
+                {type: 'water', x: 550, y: 450, w: 100, h: 250, r: 30},
+                {type: 'wall', x: 350, y: 250, w: 200, h: 20},
+                {type: 'wall', x: 350, y: 930, w: 200, h: 20}
+            ],
+            [
+                {type: 'wall', x: 200, y: 600, w: 500, h: 20},
+                {type: 'water', x: 380, y: 250, w: 140, h: 100, r: 25},
+                {type: 'water', x: 380, y: 850, w: 140, h: 100, r: 25}
+            ],
+            [
+                {type: 'water', x: 150, y: 300, w: 130, h: 130, r: 30},
+                {type: 'water', x: 620, y: 750, w: 130, h: 130, r: 30},
+                {type: 'wall', x: 400, y: 400, w: 20, h: 400}
+            ],
+            [
+                {type: 'wall', x: 250, y: 300, w: 400, h: 20},
+                {type: 'wall', x: 250, y: 900, w: 400, h: 20},
+                {type: 'water', x: 395, y: 530, w: 110, h: 140, r: 30}
+            ],
+            [
+                {type: 'water', x: 220, y: 350, w: 120, h: 120, r: 30},
+                {type: 'water', x: 560, y: 350, w: 120, h: 120, r: 30},
+                {type: 'water', x: 390, y: 700, w: 120, h: 120, r: 30},
+                {type: 'wall', x: 150, y: 580, w: 150, h: 20},
+                {type: 'wall', x: 600, y: 580, w: 150, h: 20}
+            ],
+            [
+                {type: 'wall', x: 300, y: 200, w: 20, h: 300},
+                {type: 'wall', x: 580, y: 700, w: 20, h: 300},
+                {type: 'water', x: 375, y: 525, w: 150, h: 150, r: 40}
+            ],
+            [
+                {type: 'water', x: 180, y: 500, w: 120, h: 120, r: 30},
+                {type: 'water', x: 600, y: 500, w: 120, h: 120, r: 30},
+                {type: 'wall', x: 350, y: 300, w: 200, h: 20},
+                {type: 'wall', x: 350, y: 880, w: 200, h: 20}
+            ],
+            [
+                {type: 'wall', x: 200, y: 350, w: 20, h: 500},
+                {type: 'wall', x: 680, y: 350, w: 20, h: 500},
+                {type: 'water', x: 380, y: 530, w: 140, h: 140, r: 30}
+            ],
+            [
+                {type: 'water', x: 300, y: 300, w: 300, h: 90, r: 25},
+                {type: 'water', x: 300, y: 810, w: 300, h: 90, r: 25},
+                {type: 'wall', x: 440, y: 480, w: 20, h: 240}
+            ],
+            [
+                {type: 'wall', x: 150, y: 400, w: 250, h: 20},
+                {type: 'wall', x: 500, y: 780, w: 250, h: 20},
+                {type: 'water', x: 370, y: 540, w: 160, h: 120, r: 35}
+            ],
+            [
+                {type: 'water', x: 220, y: 250, w: 110, h: 110, r: 25},
+                {type: 'water', x: 570, y: 250, w: 110, h: 110, r: 25},
+                {type: 'water', x: 390, y: 840, w: 120, h: 120, r: 30},
+                {type: 'wall', x: 300, y: 550, w: 300, h: 20}
+            ],
+            [
+                {type: 'wall', x: 440, y: 250, w: 20, h: 700},
+                {type: 'water', x: 200, y: 530, w: 120, h: 140, r: 30},
+                {type: 'water', x: 580, y: 530, w: 120, h: 140, r: 30}
+            ],
+            [
+                {type: 'water', x: 250, y: 380, w: 130, h: 130, r: 35},
+                {type: 'water', x: 520, y: 690, w: 130, h: 130, r: 35},
+                {type: 'wall', x: 200, y: 750, w: 200, h: 20},
+                {type: 'wall', x: 500, y: 430, w: 200, h: 20}
+            ],
+            [
+                {type: 'wall', x: 250, y: 300, w: 20, h: 600},
+                {type: 'wall', x: 630, y: 300, w: 20, h: 600},
+                {type: 'water', x: 385, y: 525, w: 130, h: 150, r: 35}
+            ],
+            [
+                {type: 'water', x: 200, y: 300, w: 100, h: 100, r: 25},
+                {type: 'water', x: 600, y: 300, w: 100, h: 100, r: 25},
+                {type: 'water', x: 200, y: 800, w: 100, h: 100, r: 25},
+                {type: 'water', x: 600, y: 800, w: 100, h: 100, r: 25},
+                {type: 'wall', x: 320, y: 550, w: 260, h: 20}
+            ]
+        ];
+
+        let currentMap = [];
+
         let player = {
             x: worldWidth / 2,
             y: worldHeight / 2,
@@ -361,7 +419,9 @@
             hp: 10,
             maxHp: 10,
             speed: 4,
-            angle: 0
+            angle: 0,
+            shootCooldown: 0,
+            maxCooldown: 35
         };
 
         let bullets = [];
@@ -369,11 +429,31 @@
         let floatTexts = [];
         let particles = [];
 
+        let mouse = { x: 0, y: 0, down: false };
         let joystick = { active: false, x: 0, y: 0, dx: 0, dy: 0, maxDist: 38 };
         let keys = {};
+
         window.addEventListener("keydown", e => keys[e.key.toLowerCase()] = true);
         window.addEventListener("keyup", e => keys[e.key.toLowerCase()] = false);
 
+        // PC Maus-Steuerung (Diep.io Style)
+        canvas.addEventListener("mousemove", e => {
+            const rect = canvas.getBoundingClientRect();
+            mouse.x = e.clientX - rect.left;
+            mouse.y = e.clientY - rect.top;
+        });
+
+        canvas.addEventListener("mousedown", e => {
+            if (!gameRunning || isPaused) return;
+            mouse.down = true;
+            shootPlayerBullet();
+        });
+
+        window.addEventListener("mouseup", () => {
+            mouse.down = false;
+        });
+
+        // Mobile Touch Joystick
         const pad = document.getElementById("joystick-pad");
         const knob = document.getElementById("joystick-knob");
         const fireBtn = document.getElementById("fire-btn");
@@ -398,21 +478,6 @@
             e.preventDefault();
             resetJoystick();
         }, {passive: false});
-
-        pad.addEventListener("mousedown", e => {
-            if (isPaused) return;
-            const rect = pad.getBoundingClientRect();
-            joystick.x = rect.left + rect.width / 2;
-            joystick.y = rect.top + rect.height / 2;
-            updateJoystick(e.clientX, e.clientY);
-            joystick.active = true;
-        });
-        window.addEventListener("mousemove", e => {
-            if (joystick.active && !isPaused) updateJoystick(e.clientX, e.clientY);
-        });
-        window.addEventListener("mouseup", () => {
-            if (joystick.active) resetJoystick();
-        });
 
         function updateJoystick(clientX, clientY) {
             let pullX = clientX - joystick.x;
@@ -439,11 +504,7 @@
             e.preventDefault();
             shootPlayerBullet();
         }, {passive: false});
-        fireBtn.addEventListener("mousedown", () => {
-            if (!isPaused) shootPlayerBullet();
-        });
 
-        // Pause Funktionen
         function togglePause() {
             if (!gameRunning) return;
             isPaused = !isPaused;
@@ -467,9 +528,7 @@
             requestAnimationFrame(gameLoop);
         }
 
-        function openOptions() {
-            alert("Optionen folgen bald!");
-        }
+        function openOptions() { alert("Optionen folgen bald!"); }
 
         function openShop() {
             document.getElementById("start-screen").style.display = "none";
@@ -490,22 +549,12 @@
                 let skin = skins[id];
                 let isUnlocked = unlockedSkins.includes(id);
                 let isEquipped = selectedSkin === id;
-
-                let btnHTML = "";
-                if (isEquipped) {
-                    btnHTML = `<button class="buy-btn equipped">Ausgerüstet</button>`;
-                } else if (isUnlocked) {
-                    btnHTML = `<button class="buy-btn locked" onclick="selectSkin('${id}')">Auswählen</button>`;
-                } else {
-                    btnHTML = `<button class="buy-btn" onclick="buySkin('${id}')">${skin.price} 🪙</button>`;
-                }
-
+                let btnHTML = isEquipped ? `<button class="buy-btn equipped">Ausgerüstet</button>` :
+                              isUnlocked ? `<button class="buy-btn locked" onclick="selectSkin('${id}')">Auswählen</button>` :
+                              `<button class="buy-btn" onclick="buySkin('${id}')">${skin.price} 🪙</button>`;
                 container.innerHTML += `
                     <div class="shop-item">
-                        <div class="shop-info">
-                            <h3>${skin.name}</h3>
-                            <p>${skin.price === 0 ? 'Standard Skin' : skin.price + ' Coins'}</p>
-                        </div>
+                        <div class="shop-info"><h3>${skin.name}</h3><p>${skin.price === 0 ? 'Standard Skin' : skin.price + ' Coins'}</p></div>
                         ${btnHTML}
                     </div>
                 `;
@@ -522,9 +571,7 @@
                 localStorage.setItem('blob_selected_skin', selectedSkin);
                 updateCoinDisplay();
                 renderShop();
-            } else {
-                alert("Nicht genug Coins!");
-            }
+            } else { alert("Nicht genug Coins!"); }
         }
 
         function selectSkin(id) {
@@ -554,9 +601,18 @@
             document.getElementById("mobile-controls").style.display = "flex";
             document.getElementById("pause-btn").style.display = "flex";
 
+            const randomIndex = Math.floor(Math.random() * mapsList.length);
+            currentMap = mapsList[randomIndex];
+
             player.x = worldWidth / 2;
             player.y = worldHeight / 2;
+            while (checkCollisionWithObstacles(player.x, player.y, player.radius)) {
+                player.x = Math.random() * (worldWidth - 200) + 100;
+                player.y = Math.random() * (worldHeight - 200) + 100;
+            }
+
             player.hp = 10;
+            player.shootCooldown = 0;
             kills = 0;
             bullets = [];
             enemies = [];
@@ -572,27 +628,69 @@
         }
 
         function spawnEnemy() {
-            let ex, ey;
+            let ex, ey, safe = false, attempts = 0;
             do {
                 ex = Math.random() * (worldWidth - 80) + 40;
                 ey = Math.random() * (worldHeight - 80) + 40;
-            } while (Math.hypot(ex - player.x, ey - player.y) < 250);
+                if (Math.hypot(ex - player.x, ey - player.y) > 250 && !checkCollisionWithObstacles(ex, ey, 20)) {
+                    safe = true;
+                }
+                attempts++;
+                if (attempts > 50) break;
+            } while (!safe);
 
             enemies.push({
                 x: ex, y: ey,
                 radius: 20,
                 hp: 10, maxHp: 10,
                 speed: 1.2 + Math.random() * 1.5,
-                preferredDist: 50 + Math.random() * 120,
+                preferredDist: 60 + Math.random() * 100,
                 strafeDir: Math.random() < 0.5 ? 1 : -1,
                 shootCooldown: Math.random() * 60 + 30,
                 wanderAngle: Math.random() * Math.PI * 2,
-                color: "#ff3366"
+                color: enemyColors[Math.floor(Math.random() * enemyColors.length)]
             });
+        }
+
+        function checkCollisionWithObstacles(x, y, radius) {
+            for (let obs of currentMap) {
+                let closestX = Math.max(obs.x, Math.min(x, obs.x + obs.w));
+                let closestY = Math.max(obs.y, Math.min(y, obs.y + obs.h));
+                let distX = x - closestX;
+                let distY = y - closestY;
+                if ((distX * distX + distY * distY) < (radius * radius)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        // Taktische Sichtlinienprüfung für Bots
+        function hasLineOfSight(x1, y1, x2, y2) {
+            let steps = 12;
+            for (let s = 1; s <= steps; s++) {
+                let t = s / steps;
+                let cx = x1 + (x2 - x1) * t;
+                let cy = y1 + (y2 - y1) * t;
+                if (checkCollisionWithObstacles(cx, cy, 5)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        function moveWithCollision(entity, dx, dy) {
+            entity.x += dx;
+            if (checkCollisionWithObstacles(entity.x, entity.y, entity.radius)) { entity.x -= dx; }
+            entity.y += dy;
+            if (checkCollisionWithObstacles(entity.x, entity.y, entity.radius)) { entity.y -= dy; }
         }
 
         function shootPlayerBullet() {
             if (!gameRunning || isPaused) return;
+            if (player.shootCooldown > 0) return;
+
+            player.shootCooldown = player.maxCooldown;
             let angle = player.angle;
             bullets.push({
                 x: player.x, y: player.y,
@@ -611,8 +709,7 @@
                 const angle = Math.random() * Math.PI * 2;
                 const speed = Math.random() * 3 + 1;
                 particles.push({
-                    x: x, y: y,
-                    dx: Math.cos(angle) * speed, dy: Math.sin(angle) * speed,
+                    x: x, y: y, dx: Math.cos(angle) * speed, dy: Math.sin(angle) * speed,
                     radius: Math.random() * 3 + 1, color: color, alpha: 1.0
                 });
             }
@@ -648,6 +745,15 @@
 
             document.getElementById("remaining-players").innerText = enemies.length + 1;
 
+            if (player.shootCooldown > 0) player.shootCooldown--;
+
+            // PC Aiming (Diep.io Style: Mauszeiger bestimmt Blickrichtung)
+            // Prüfen ob Maus aktiv bewegt wird oder geklickt gehalten wird
+            if (mouse.down) {
+                player.angle = Math.atan2(mouse.y - canvas.height / 2, mouse.x - canvas.width / 2);
+                shootPlayerBullet();
+            }
+
             let moveX = joystick.dx;
             let moveY = joystick.dy;
 
@@ -657,12 +763,13 @@
             if (keys['d'] || keys['arrowright']) moveX = 1;
 
             if (moveX !== 0 || moveY !== 0) {
-                player.x += moveX * player.speed;
-                player.y += moveY * player.speed;
-                player.angle = Math.atan2(moveY, moveX);
+                // Wenn auf PC keine Maus gedrückt wird, bestimmt die Bewegungsrichtung das Aiming
+                if (!mouse.down) {
+                    player.angle = Math.atan2(moveY, moveX);
+                }
+                moveWithCollision(player, moveX * player.speed, moveY * player.speed);
             }
 
-            // MAP-BEGRENZUNG FÜR SPIELER ERZWINGEN
             player.x = Math.max(player.radius, Math.min(worldWidth - player.radius, player.x));
             player.y = Math.max(player.radius, Math.min(worldHeight - player.radius, player.y));
 
@@ -671,7 +778,8 @@
                 let b = bullets[i];
                 b.x += b.dx; b.y += b.dy;
 
-                if (b.x < 0 || b.x > worldWidth || b.y < 0 || b.y > worldHeight) {
+                if (b.x < 0 || b.x > worldWidth || b.y < 0 || b.y > worldHeight || checkCollisionWithObstacles(b.x, b.y, b.radius)) {
+                    createParticles(b.x, b.y, b.color);
                     bullets.splice(i, 1);
                     continue;
                 }
@@ -690,30 +798,22 @@
                                 enemies.splice(j, 1);
                                 kills++;
                                 document.getElementById("kill-count").innerText = kills;
-
-                                if (enemies.length === 0) {
-                                    gameOver(true);
-                                }
+                                if (enemies.length === 0) gameOver(true);
                             }
                             break;
                         }
                     }
                     if (hit) { bullets.splice(i, 1); continue; }
                 } else {
-                    // Bot trifft Spieler
                     if (Math.hypot(b.x - player.x, b.y - player.y) < b.radius + player.radius) {
                         player.hp -= 1;
                         createParticles(player.x, player.y, "#00f3ff");
                         addFloatText("-1 HP", player.x, player.y - 20, "#ff3366");
                         bullets.splice(i, 1);
-
-                        if (player.hp <= 0) {
-                            gameOver(false);
-                        }
+                        if (player.hp <= 0) gameOver(false);
                         continue;
                     }
 
-                    // Bot trifft Bot (FFA)
                     let botHit = false;
                     for (let j = enemies.length - 1; j >= 0; j--) {
                         if (b.shooterIndex === j) continue;
@@ -723,12 +823,9 @@
                             botHit = true;
                             createParticles(en.x, en.y, "#ff3366");
                             addFloatText("-1 HP", en.x, en.y - 20, "#ff00ff");
-
                             if (en.hp <= 0) {
                                 enemies.splice(j, 1);
-                                if (enemies.length === 0) {
-                                    gameOver(true);
-                                }
+                                if (enemies.length === 0) gameOver(true);
                             }
                             break;
                         }
@@ -737,7 +834,7 @@
                 }
             }
 
-            // GEGNER-KI (Inklusive strenger Map-Begrenzung!)
+            // Taktische Gegner-KI (nutzt Wände & Wasser als Deckung und Peeking)
             for (let i = enemies.length - 1; i >= 0; i--) {
                 let en = enemies[i];
                 let targetX = player.x;
@@ -761,6 +858,9 @@
                 let angleToTarget = Math.atan2(targetY - en.y, targetX - en.x);
                 en.wanderAngle += (Math.random() - 0.5) * 0.5;
 
+                // Taktischer Check: Ist der Weg zum Ziel durch eine Wand blockiert?
+                let hasLOS = hasLineOfSight(en.x, en.y, targetX, targetY);
+
                 let sepX = 0, sepY = 0;
                 for (let j = 0; j < enemies.length; j++) {
                     if (i === j) continue;
@@ -773,35 +873,46 @@
                 }
 
                 let moveX = 0, moveY = 0;
-                if (closestDist > en.preferredDist + 20) {
-                    moveX = Math.cos(angleToTarget) * (en.speed * 0.8);
-                    moveY = Math.sin(angleToTarget) * (en.speed * 0.8);
-                } else if (closestDist < en.preferredDist - 20) {
-                    moveX = -Math.cos(angleToTarget) * (en.speed * 0.6);
-                    moveY = -Math.sin(angleToTarget) * (en.speed * 0.6);
+                if (!hasLOS) {
+                    // Wenn kein Blickfeld da ist: Versuche seitlich um die Deckung zu "peeken"
+                    let peekAngle = angleToTarget + (Math.PI / 2) * en.strafeDir;
+                    moveX = Math.cos(peekAngle) * (en.speed * 0.9);
+                    moveY = Math.sin(peekAngle) * (en.speed * 0.9);
                 } else {
-                    let strafeAngle = angleToTarget + (Math.PI / 2) * en.strafeDir;
-                    moveX = Math.cos(strafeAngle) * (en.speed * 0.75);
-                    moveY = Math.sin(strafeAngle) * (en.speed * 0.75);
+                    if (closestDist > en.preferredDist + 20) {
+                        moveX = Math.cos(angleToTarget) * (en.speed * 0.8);
+                        moveY = Math.sin(angleToTarget) * (en.speed * 0.8);
+                    } else if (closestDist < en.preferredDist - 20) {
+                        moveX = -Math.cos(angleToTarget) * (en.speed * 0.6);
+                        moveY = -Math.sin(angleToTarget) * (en.speed * 0.6);
+                    } else {
+                        let strafeAngle = angleToTarget + (Math.PI / 2) * en.strafeDir;
+                        moveX = Math.cos(strafeAngle) * (en.speed * 0.75);
+                        moveY = Math.sin(strafeAngle) * (en.speed * 0.75);
+                    }
                 }
 
-                en.x += moveX + sepX * 1.8 + Math.cos(en.wanderAngle) * 0.5;
-                en.y += moveY + sepY * 1.8 + Math.sin(en.wanderAngle) * 0.5;
+                let finalMoveX = moveX + sepX * 1.8 + Math.cos(en.wanderAngle) * 0.5;
+                let finalMoveY = moveY + sepY * 1.8 + Math.sin(en.wanderAngle) * 0.5;
 
-                // MAP-BEGRENZUNG FÜR GEGNER ERZWINGEN
+                moveWithCollision(en, finalMoveX, finalMoveY);
+
                 en.x = Math.max(en.radius, Math.min(worldWidth - en.radius, en.x));
                 en.y = Math.max(en.radius, Math.min(worldHeight - en.radius, en.y));
 
                 en.shootCooldown--;
                 if (en.shootCooldown <= 0) {
                     en.shootCooldown = Math.random() * 60 + 30;
-                    let shootAngle = Math.atan2(targetY - en.y, targetX - en.x) + (Math.random() - 0.5) * 0.4;
-                    bullets.push({
-                        x: en.x, y: en.y,
-                        dx: Math.cos(shootAngle) * 4.5, dy: Math.sin(shootAngle) * 4.5,
-                        radius: 6, color: targetIsPlayer ? "#ff9900" : "#ff00ff",
-                        fromPlayer: false, shooterIndex: i
-                    });
+                    // Nur schießen, wenn freie Sichtlinie besteht! Keine verschwendeten Schüsse in Wände
+                    if (hasLOS) {
+                        let shootAngle = angleToTarget + (Math.random() - 0.5) * 0.3;
+                        bullets.push({
+                            x: en.x, y: en.y,
+                            dx: Math.cos(shootAngle) * 4.5, dy: Math.sin(shootAngle) * 4.5,
+                            radius: 6, color: targetIsPlayer ? "#ff9900" : "#ff00ff",
+                            fromPlayer: false, shooterIndex: i
+                        });
+                    }
                 }
             }
 
@@ -836,11 +947,26 @@
                 ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(worldWidth, y); ctx.stroke();
             }
 
+            for (let obs of currentMap) {
+                ctx.save();
+                if (obs.type === 'water') {
+                    ctx.shadowBlur = 15; ctx.shadowColor = "#00f3ff";
+                    ctx.fillStyle = "rgba(14, 116, 144, 0.65)";
+                    ctx.strokeStyle = "#00f3ff"; ctx.lineWidth = 3;
+                    ctx.beginPath(); ctx.roundRect(obs.x, obs.y, obs.w, obs.h, obs.r || 20); ctx.fill(); ctx.stroke();
+                } else {
+                    ctx.shadowBlur = 12; ctx.shadowColor = "#3b82f6";
+                    ctx.fillStyle = "#1e293b";
+                    ctx.strokeStyle = "#3b82f6"; ctx.lineWidth = 3;
+                    ctx.beginPath(); ctx.roundRect(obs.x, obs.y, obs.w, obs.h, 8); ctx.fill(); ctx.stroke();
+                }
+                ctx.restore();
+            }
+
             ctx.strokeStyle = "#334155";
             ctx.lineWidth = 6;
             ctx.strokeRect(0, 0, worldWidth, worldHeight);
 
-            // Gegner
             for (let en of enemies) {
                 ctx.save();
                 ctx.shadowBlur = 12; ctx.shadowColor = en.color;
@@ -856,7 +982,6 @@
             drawPlayerSkin();
             drawHealthBar(player.x, player.y - player.radius - 12, player.hp, player.maxHp);
 
-            // Kugeln
             for (let b of bullets) {
                 ctx.save();
                 ctx.shadowBlur = 10; ctx.shadowColor = b.color;
