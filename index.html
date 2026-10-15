@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Blob Arena - Taktische Edition</title>
+    <title>Blob Arena - Ultimate Classes Edition</title>
     <style>
         * {
             box-sizing: border-box;
@@ -88,46 +88,106 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(11, 15, 25, 0.95);
+            background: rgba(11, 15, 25, 0.92);
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
+            justify-content: space-between;
             text-align: center;
             z-index: 20;
-            padding: 30px;
+            padding: 40px 20px;
             cursor: default;
         }
         .screen h1 {
             color: #00f3ff;
-            font-size: 34px;
-            margin-bottom: 10px;
+            font-size: 32px;
+            margin: 10px 0 5px 0;
             text-shadow: 0 0 15px rgba(0,243,255,0.5);
         }
-        .screen p {
+        .menu-top {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .class-selector-box {
+            background: rgba(30, 41, 59, 0.8);
+            border: 2px solid #334155;
+            border-radius: 16px;
+            padding: 15px;
+            width: 100%;
+            max-width: 340px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+            backdrop-filter: blur(8px);
+        }
+        .arrow-btn {
+            background: rgba(15, 23, 42, 0.9);
+            border: 2px solid #00f3ff;
+            color: #00f3ff;
+            font-size: 20px;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+        .arrow-btn:active {
+            transform: scale(0.9);
+            background: #00f3ff;
+            color: #000;
+        }
+        .class-info {
+            flex-grow: 1;
+            padding: 0 10px;
+        }
+        .class-info h3 {
+            margin: 0 0 5px 0;
+            color: #f8fafc;
+            font-size: 18px;
+        }
+        .class-info p {
+            margin: 0;
+            font-size: 12px;
             color: #94a3b8;
-            margin-bottom: 25px;
-            font-size: 14px;
-            line-height: 1.5;
+            line-height: 1.3;
+        }
+        .menu-bottom {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 10px;
         }
         .btn {
             background: linear-gradient(135deg, #00f3ff, #0066ff);
             color: #fff;
             border: none;
-            padding: 14px 36px;
-            font-size: 17px;
+            padding: 16px 36px;
+            font-size: 18px;
             font-weight: bold;
             cursor: pointer;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,243,255,0.4);
+            border-radius: 14px;
+            box-shadow: 0 4px 25px rgba(0,243,255,0.4);
             pointer-events: auto;
-            margin: 8px 0;
-            width: 220px;
+            width: 260px;
+            transition: transform 0.1s;
         }
+        .btn:active { transform: scale(0.96); }
         .btn-secondary {
             background: linear-gradient(135deg, #334155, #1e293b);
             border: 2px solid #475569;
             box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            width: 200px;
+            padding: 12px 24px;
+            font-size: 15px;
         }
         .end-buttons {
             display: flex;
@@ -149,7 +209,7 @@
         }
         #retry-btn { background: #10b981; color: #fff; }
         #home-btn { background: #6366f1; color: #fff; }
-        #shop-screen { display: none; }
+        #shop-screen { display: none; justify-content: flex-start; }
         .shop-list {
             width: 100%;
             max-height: 380px;
@@ -211,31 +271,60 @@
 
         <button id="pause-btn" onclick="togglePause()">⏸</button>
 
+        <!-- Überarbeitetes Hauptmenü -->
         <div id="start-screen" class="screen">
-            <h1>BLOB ARENA</h1>
-            <p>Taktische Bots, bunte Gegner & Faded Laser-Aiming!<br><br>Coins: <span id="menu-coins" style="color: #f59e0b; font-weight: bold;">0</span> 🪙</p>
-            <button class="btn" onclick="startGame()">SPIEL STARTEN</button>
-            <button class="btn btn-secondary" onclick="openShop()">SHOP</button>
+            <div class="menu-top">
+                <h1>BLOB ARENA</h1>
+                <p>Wähle deine Klasse & vernichte die Arena!</p>
+                
+                <!-- Blob Klassen Selector mit Pfeilen -->
+                <div class="class-selector-box">
+                    <button class="arrow-btn" onclick="changeClass(-1)">◀</button>
+                    <div class="class-info">
+                        <h3 id="menu-class-name">Standard Blob</h3>
+                        <p id="menu-class-desc">Ausgewogener Allrounder.</p>
+                        <p id="menu-class-status" style="margin-top: 4px; font-weight: bold; color: #10b981;"></p>
+                    </div>
+                    <button class="arrow-btn" onclick="changeClass(1)">▶</button>
+                </div>
+            </div>
+
+            <div class="menu-bottom">
+                <div style="font-size: 13px; color: #94a3b8; margin-bottom: -5px;">
+                    Level <span id="player-level" style="color: #00f3ff; font-weight: bold;">1</span> | XP: <span id="player-xp">0</span> / <span id="player-next-xp">150</span> | Coins: <span id="menu-coins" style="color: #f59e0b; font-weight: bold;">0</span> 🪙
+                </div>
+                <button class="btn" onclick="startGame()">SPIEL STARTEN</button>
+                <button class="btn btn-secondary" onclick="openShop()">SKIN SHOP</button>
+            </div>
         </div>
 
-        <div id="shop-screen" class="screen">
-            <h1>SKIN SHOP</h1>
-            <p>Deine Coins: <span id="shop-coins-display" style="color: #f59e0b; font-weight: bold;">0</span> 🪙</p>
-            <div class="shop-list" id="shop-items-container"></div>
-            <button class="btn btn-secondary" onclick="closeShop()">ZURÜCK</button>
+        <!-- Shop Menü -->
+        <div id="shop-screen" class="screen" style="display: none;">
+            <div class="menu-top" style="width: 100%;">
+                <h1>SKIN SHOP</h1>
+                <p>Deine Coins: <span id="shop-coins-display" style="color: #f59e0b; font-weight: bold;">0</span> 🪙</p>
+                <div class="shop-list" id="shop-items-container"></div>
+            </div>
+            <div class="menu-bottom">
+                <button class="btn btn-secondary" onclick="closeShop()">ZURÜCK</button>
+            </div>
         </div>
 
-        <div id="pause-screen" class="screen" style="display: none;">
+        <!-- Pause Menü -->
+        <div id="pause-screen" class="screen" style="display: none; justify-content: center;">
             <h1>PAUSE</h1>
-            <button class="btn" onclick="resumeGame()">Weiter spielen</button>
-            <button class="btn btn-secondary" onclick="startGame()">Erneut Versuchen</button>
-            <button class="btn btn-secondary" onclick="openOptions()">Optionen</button>
-            <button class="btn btn-secondary" onclick="goHome()">Hauptmenü</button>
+            <div style="display: flex; flex-direction: column; gap: 12px; align-items: center; width: 100%;">
+                <button class="btn" onclick="resumeGame()">Weiter spielen</button>
+                <button class="btn btn-secondary" onclick="startGame()">Erneut Versuchen</button>
+                <button class="btn btn-secondary" onclick="openOptions()">Optionen</button>
+                <button class="btn btn-secondary" onclick="goHome()">Hauptmenü</button>
+            </div>
         </div>
 
-        <div id="end-screen" class="screen" style="display: none;">
+        <!-- End-Screen -->
+        <div id="end-screen" class="screen" style="display: none; justify-content: center;">
             <h1 id="end-title">GAME OVER</h1>
-            <p id="end-message">Du wurdest besiegt!</p>
+            <p id="end-message" style="font-size: 16px; margin: 10px 0;">Du wurdest besiegt!</p>
             <div class="end-buttons">
                 <button class="icon-btn" id="retry-btn" onclick="startGame()" title="Retry">↺</button>
                 <button class="icon-btn" id="home-btn" onclick="goHome()" title="Home">⌂</button>
@@ -264,8 +353,64 @@
         resizeCanvas();
 
         let coins = parseInt(localStorage.getItem('blob_coins')) || 0;
+        let totalXP = parseInt(localStorage.getItem('blob_xp')) || 0;
         let unlockedSkins = JSON.parse(localStorage.getItem('blob_unlocked_skins')) || ['default'];
         let selectedSkin = localStorage.getItem('blob_selected_skin') || 'default';
+
+        // Blob Klassen Definitionen (mit Level-Voraussetzungen & Eigenschaften)
+        const blobClasses = [
+            { id: 'standard', name: "Standard Blob", level: 1, radius: 20, speed: 4, hp: 10, fireRate: 35, color: "#00f3ff", bulletSpeed: 12, bulletSize: 6, desc: "Ausgewogener Allrounder mit Standard-Gewehr." },
+            { id: 'agile', name: "Agile MP", level: 2, radius: 17, speed: 5.5, hp: 7, fireRate: 12, color: "#84cc16", bulletSpeed: 15, bulletSize: 4, desc: "Extrem schnell, feuert dünne, rasante MP-Salven." },
+            { id: 'shotgun', name: "Shotgunner", level: 3, radius: 21, speed: 3.8, hp: 12, fireRate: 50, color: "#f97316", bulletSpeed: 11, bulletSize: 6, desc: "Nahkampf-Spezialist mit verheerender Schrot-Salve." },
+            { id: 'sniper', name: "Sniper Blob", level: 4, radius: 18, speed: 3.5, hp: 8, fireRate: 75, color: "#a855f7", bulletSpeed: 20, bulletSize: 8, desc: "Hält großen Abstand und feuert extrem schnelle Sniper-Kugeln." },
+            { id: 'tank', name: "Heavy Tank", level: 5, radius: 26, speed: 2.8, hp: 20, fireRate: 65, color: "#475569", armorColor: "#1e293b", bulletSpeed: 10, bulletSize: 11, desc: "Massiv gepanzert, langsam, verschießt riesige, schwere Kugeln." }
+        ];
+
+        let selectedClassIndex = parseInt(localStorage.getItem('blob_selected_class')) || 0;
+
+        function getLevel(xp) {
+            let lvl = 1;
+            while (xp >= getXpForNextLevel(lvl)) {
+                lvl++;
+            }
+            return lvl;
+        }
+
+        function getXpForNextLevel(lvl) {
+            return Math.floor(150 * Math.pow(lvl, 1.4));
+        }
+
+        function updateMenuDisplay() {
+            let currentLevel = getLevel(totalXP);
+            let nextXpReq = getXpForNextLevel(currentLevel);
+            let prevXpReq = currentLevel > 1 ? getXpForNextLevel(currentLevel - 1) : 0;
+            
+            document.getElementById("player-level").innerText = currentLevel;
+            document.getElementById("player-xp").innerText = totalXP - prevXpReq;
+            document.getElementById("player-next-xp").innerText = nextXpReq - prevXpReq;
+            document.getElementById("menu-coins").innerText = coins;
+            document.getElementById("shop-coins-display").innerText = coins;
+
+            let cClass = blobClasses[selectedClassIndex];
+            document.getElementById("menu-class-name").innerText = cClass.name;
+            document.getElementById("menu-class-desc").innerText = cClass.desc;
+
+            let statusEl = document.getElementById("menu-class-status");
+            if (currentLevel >= cClass.level) {
+                statusEl.innerText = "✓ FREIGESCHALTET";
+                statusEl.style.color = "#10b981";
+            } else {
+                statusEl.innerText = `🔒 Benötigt Level ${cClass.level}`;
+                statusEl.style.color = "#ef4444";
+            }
+        }
+        updateMenuDisplay();
+
+        function changeClass(dir) {
+            selectedClassIndex = (selectedClassIndex + dir + blobClasses.length) % blobClasses.length;
+            localStorage.setItem('blob_selected_class', selectedClassIndex);
+            updateMenuDisplay();
+        }
 
         const skins = {
             default: { name: "Standard Blob", price: 0, color: "#00f3ff", type: "basic" },
@@ -277,13 +422,6 @@
         };
 
         const enemyColors = ["#ff3366", "#f97316", "#a855f7", "#ec4899", "#84cc16", "#06b6d4", "#eab308"];
-
-        function updateCoinDisplay() {
-            document.getElementById("menu-coins").innerText = coins;
-            document.getElementById("shop-coins-display").innerText = coins;
-            localStorage.setItem('blob_coins', coins);
-        }
-        updateCoinDisplay();
 
         let gameRunning = false;
         let isPaused = false;
@@ -421,7 +559,8 @@
             speed: 4,
             angle: 0,
             shootCooldown: 0,
-            maxCooldown: 35
+            maxCooldown: 35,
+            classConfig: blobClasses[0]
         };
 
         let bullets = [];
@@ -436,7 +575,6 @@
         window.addEventListener("keydown", e => keys[e.key.toLowerCase()] = true);
         window.addEventListener("keyup", e => keys[e.key.toLowerCase()] = false);
 
-        // PC Maus-Steuerung (Diep.io Style: Cursor bestimmt dauerhaft den Winkel)
         canvas.addEventListener("mousemove", e => {
             const rect = canvas.getBoundingClientRect();
             mouse.x = e.clientX - rect.left;
@@ -452,11 +590,8 @@
             shootPlayerBullet();
         });
 
-        window.addEventListener("mouseup", () => {
-            mouse.down = false;
-        });
+        window.addEventListener("mouseup", () => { mouse.down = false; });
 
-        // Mobile Touch Joystick
         const pad = document.getElementById("joystick-pad");
         const knob = document.getElementById("joystick-knob");
         const fireBtn = document.getElementById("fire-btn");
@@ -542,7 +677,7 @@
         function closeShop() {
             document.getElementById("shop-screen").style.display = "none";
             document.getElementById("start-screen").style.display = "flex";
-            updateCoinDisplay();
+            updateMenuDisplay();
         }
 
         function renderShop() {
@@ -572,7 +707,7 @@
                 selectedSkin = id;
                 localStorage.setItem('blob_unlocked_skins', JSON.stringify(unlockedSkins));
                 localStorage.setItem('blob_selected_skin', selectedSkin);
-                updateCoinDisplay();
+                updateMenuDisplay();
                 renderShop();
             } else { alert("Nicht genug Coins!"); }
         }
@@ -592,10 +727,18 @@
             document.getElementById("mobile-controls").style.display = "none";
             document.getElementById("pause-btn").style.display = "none";
             document.getElementById("start-screen").style.display = "flex";
-            updateCoinDisplay();
+            updateMenuDisplay();
         }
 
         function startGame() {
+            let chosenClass = blobClasses[selectedClassIndex];
+            let currentLevel = getLevel(totalXP);
+
+            if (currentLevel < chosenClass.level) {
+                alert(`Du musst erst Level ${chosenClass.level} erreichen, um diese Klasse zu spielen!`);
+                return;
+            }
+
             document.getElementById("start-screen").style.display = "none";
             document.getElementById("shop-screen").style.display = "none";
             document.getElementById("end-screen").style.display = "none";
@@ -607,6 +750,14 @@
             const randomIndex = Math.floor(Math.random() * mapsList.length);
             currentMap = mapsList[randomIndex];
 
+            player.classConfig = chosenClass;
+            player.radius = chosenClass.radius;
+            player.speed = chosenClass.speed;
+            player.hp = chosenClass.hp;
+            player.maxHp = chosenClass.hp;
+            player.maxCooldown = chosenClass.fireRate;
+            player.shootCooldown = 0;
+
             player.x = worldWidth / 2;
             player.y = worldHeight / 2;
             while (checkCollisionWithObstacles(player.x, player.y, player.radius)) {
@@ -614,8 +765,6 @@
                 player.y = Math.random() * (worldHeight - 200) + 100;
             }
 
-            player.hp = 10;
-            player.shootCooldown = 0;
             kills = 0;
             bullets = [];
             enemies = [];
@@ -642,16 +791,20 @@
                 if (attempts > 50) break;
             } while (!safe);
 
+            let eTypeIndex = Math.floor(Math.random() * blobClasses.length);
+            let eConfig = blobClasses[eTypeIndex];
+
             enemies.push({
                 x: ex, y: ey,
-                radius: 20,
-                hp: 10, maxHp: 10,
-                speed: 1.2 + Math.random() * 1.5,
-                preferredDist: 60 + Math.random() * 100,
+                radius: eConfig.radius,
+                hp: eConfig.hp, maxHp: eConfig.hp,
+                speed: eConfig.speed,
+                preferredDist: eConfig.id === 'sniper' ? 180 : (eConfig.id === 'shotgun' ? 50 : 90),
                 strafeDir: Math.random() < 0.5 ? 1 : -1,
                 shootCooldown: Math.random() * 60 + 30,
                 wanderAngle: Math.random() * Math.PI * 2,
-                color: enemyColors[Math.floor(Math.random() * enemyColors.length)]
+                color: eConfig.color,
+                classConfig: eConfig
             });
         }
 
@@ -674,9 +827,7 @@
                 let t = s / steps;
                 let cx = x1 + (x2 - x1) * t;
                 let cy = y1 + (y2 - y1) * t;
-                if (checkCollisionWithObstacles(cx, cy, 5)) {
-                    return false;
-                }
+                if (checkCollisionWithObstacles(cx, cy, 5)) return false;
             }
             return true;
         }
@@ -694,12 +845,27 @@
 
             player.shootCooldown = player.maxCooldown;
             let angle = player.angle;
-            bullets.push({
-                x: player.x, y: player.y,
-                dx: Math.cos(angle) * 8, dy: Math.sin(angle) * 8,
-                radius: 6, color: "#00f3ff",
-                fromPlayer: true, shooterIndex: -1
-            });
+            let cfg = player.classConfig;
+
+            if (cfg.id === 'shotgun') {
+                // Schrotflinte: 3 Kugeln mit Spread
+                for (let spread of [-0.25, 0, 0.25]) {
+                    let a = angle + spread;
+                    bullets.push({
+                        x: player.x, y: player.y,
+                        dx: Math.cos(a) * cfg.bulletSpeed, dy: Math.sin(a) * cfg.bulletSpeed,
+                        radius: cfg.bulletSize, color: cfg.color,
+                        fromPlayer: true, shooterIndex: -1
+                    });
+                }
+            } else {
+                bullets.push({
+                    x: player.x, y: player.y,
+                    dx: Math.cos(angle) * cfg.bulletSpeed, dy: Math.sin(angle) * cfg.bulletSpeed,
+                    radius: cfg.bulletSize, color: cfg.color,
+                    fromPlayer: true, shooterIndex: -1
+                });
+            }
         }
 
         function addFloatText(text, x, y, color = "#ff4444") {
@@ -728,17 +894,24 @@
             const title = document.getElementById("end-title");
             const msg = document.getElementById("end-message");
 
+            // XP Berechnung (Exponential mit Kills!)
+            let baseXP = won ? 150 : 40;
+            let killXP = kills > 0 ? Math.floor(30 * Math.pow(kills, 1.5)) : 0;
+            let earnedXP = baseXP + killXP;
+            totalXP += earnedXP;
+            localStorage.setItem('blob_xp', totalXP);
+
             if (won) {
                 title.innerText = "GEWONNEN!";
                 title.style.color = "#10b981";
                 let earnedCoins = Math.floor(Math.random() * 11) + 10;
                 coins += earnedCoins;
-                updateCoinDisplay();
-                msg.innerText = `Du hast alle Gegner vernichtet!\n+${earnedCoins} Coins erhalten 🪙`;
+                updateMenuDisplay();
+                msg.innerText = `Du hast alle Gegner vernichtet!\n+${earnedCoins} Coins 🪙 | +${earnedXP} XP ✨`;
             } else {
                 title.innerText = "GAME OVER";
                 title.style.color = "#ff3366";
-                msg.innerText = `Du hast ${kills} Gegner besiegt!`;
+                msg.innerText = `Du hast ${kills} Gegner besiegt!\n+${earnedXP} XP ✨ erhalten.`;
             }
         }
 
@@ -749,7 +922,6 @@
 
             if (player.shootCooldown > 0) player.shootCooldown--;
 
-            // Wenn Maus gedrückt gehalten wird, kontinuierlich schießen
             if (mouse.down) {
                 shootPlayerBullet();
             }
@@ -763,7 +935,6 @@
             if (keys['d'] || keys['arrowright']) moveX = 1;
 
             if (moveX !== 0 || moveY !== 0) {
-                // Auf Mobile bestimmt der Joystick das Aiming, falls kein Maus-Hover aktiv
                 if (joystick.active) {
                     player.angle = Math.atan2(moveY, moveX);
                 }
@@ -834,7 +1005,7 @@
                 }
             }
 
-            // Taktische Gegner-KI
+            // Gegner-KI
             for (let i = enemies.length - 1; i >= 0; i--) {
                 let en = enemies[i];
                 let targetX = player.x;
@@ -903,10 +1074,11 @@
                     en.shootCooldown = Math.random() * 60 + 30;
                     if (hasLOS) {
                         let shootAngle = angleToTarget + (Math.random() - 0.5) * 0.3;
+                        let ec = en.classConfig;
                         bullets.push({
                             x: en.x, y: en.y,
-                            dx: Math.cos(shootAngle) * 4.5, dy: Math.sin(shootAngle) * 4.5,
-                            radius: 6, color: targetIsPlayer ? "#ff9900" : "#ff00ff",
+                            dx: Math.cos(shootAngle) * ec.bulletSpeed, dy: Math.sin(shootAngle) * ec.bulletSpeed,
+                            radius: ec.bulletSize, color: targetIsPlayer ? "#ff9900" : "#ff00ff",
                             fromPlayer: false, shooterIndex: i
                         });
                     }
@@ -965,18 +1137,11 @@
             ctx.strokeRect(0, 0, worldWidth, worldHeight);
 
             for (let en of enemies) {
-                ctx.save();
-                ctx.shadowBlur = 12; ctx.shadowColor = en.color;
-                ctx.fillStyle = en.color;
-                ctx.beginPath(); ctx.arc(en.x, en.y, en.radius, 0, Math.PI * 2); ctx.fill();
-                ctx.restore();
-
-                ctx.fillStyle = "rgba(255,255,255,0.3)";
-                ctx.beginPath(); ctx.arc(en.x - 5, en.y - 5, 5, 0, Math.PI * 2); ctx.fill();
+                drawBlobCustom(en.x, en.y, en.radius, 0, en.classConfig, en.color);
                 drawHealthBar(en.x, en.y - en.radius - 12, en.hp, en.maxHp);
             }
 
-            drawPlayerSkin();
+            drawBlobCustom(player.x, player.y, player.radius, player.angle, player.classConfig, skins[selectedSkin]?.color || "#00f3ff", true);
             drawHealthBar(player.x, player.y - player.radius - 12, player.hp, player.maxHp);
 
             for (let b of bullets) {
@@ -1004,59 +1169,62 @@
             ctx.restore();
         }
 
-        function drawPlayerSkin() {
-            let skin = skins[selectedSkin] || skins['default'];
+        // Zeichnet Blobs mit klassenspezifischen Accessoires & Laser
+        function drawBlobCustom(x, y, radius, angle, cfg, mainColor, isPlayer = false) {
             ctx.save();
 
-            // Laser-Strahl zeichnen (Faded Laser, der in Blickrichtung schießt)
-            let laserLength = 170;
-            let endX = player.x + Math.cos(player.angle) * laserLength;
-            let endY = player.y + Math.sin(player.angle) * laserLength;
+            if (isPlayer) {
+                let laserLength = 170;
+                let endX = x + Math.cos(angle) * laserLength;
+                let endY = y + Math.sin(angle) * laserLength;
+                let grad = ctx.createLinearGradient(x, y, endX, endY);
+                grad.addColorStop(0, "rgba(0, 243, 255, 0.9)");
+                grad.addColorStop(0.6, "rgba(0, 243, 255, 0.3)");
+                grad.addColorStop(1, "rgba(0, 243, 255, 0)");
 
-            let grad = ctx.createLinearGradient(player.x, player.y, endX, endY);
-            grad.addColorStop(0, "rgba(0, 243, 255, 0.9)");
-            grad.addColorStop(0.6, "rgba(0, 243, 255, 0.3)");
-            grad.addColorStop(1, "rgba(0, 243, 255, 0)");
-
-            ctx.strokeStyle = grad;
-            ctx.lineWidth = 3;
-            ctx.shadowBlur = 12;
-            ctx.shadowColor = "#00f3ff";
-            ctx.beginPath();
-            ctx.moveTo(player.x, player.y);
-            ctx.lineTo(endX, endY);
-            ctx.stroke();
-            ctx.restore();
-
-            // Spieler Blob Zeichnen
-            ctx.save();
-            if (selectedSkin === 'gold_royale') {
-                ctx.shadowBlur = 18; ctx.shadowColor = "#fbbf24";
-                ctx.fillStyle = skin.color;
-                ctx.beginPath(); ctx.arc(player.x, player.y, player.radius, 0, Math.PI * 2); ctx.fill();
-                ctx.strokeStyle = "#fef08a"; ctx.lineWidth = 3;
-                ctx.beginPath(); ctx.arc(player.x, player.y, player.radius + 6, 0, Math.PI * 2); ctx.stroke();
-            } else if (selectedSkin === 'plasma_core') {
-                ctx.shadowBlur = 18; ctx.shadowColor = skin.color;
-                ctx.fillStyle = skin.color;
-                ctx.beginPath(); ctx.arc(player.x, player.y, player.radius, 0, Math.PI * 2); ctx.fill();
-                ctx.fillStyle = skin.core;
-                ctx.beginPath(); ctx.arc(player.x, player.y, 8, 0, Math.PI * 2); ctx.fill();
-            } else if (selectedSkin === 'galaxy_void') {
-                ctx.shadowBlur = 20; ctx.shadowColor = skin.color;
-                ctx.fillStyle = skin.color;
-                ctx.beginPath(); ctx.arc(player.x, player.y, player.radius, 0, Math.PI * 2); ctx.fill();
-                ctx.strokeStyle = skin.secondary; ctx.lineWidth = 3;
-                ctx.beginPath(); ctx.arc(player.x, player.y, player.radius - 4, 0, Math.PI * 2); ctx.stroke();
-            } else {
-                ctx.shadowBlur = 15; ctx.shadowColor = skin.color;
-                ctx.fillStyle = skin.color;
-                ctx.beginPath(); ctx.arc(player.x, player.y, player.radius, 0, Math.PI * 2); ctx.fill();
+                ctx.strokeStyle = grad;
+                ctx.lineWidth = 3;
+                ctx.shadowBlur = 12;
+                ctx.shadowColor = "#00f3ff";
+                ctx.beginPath();
+                ctx.moveTo(x, y);
+                ctx.lineTo(endX, endY);
+                ctx.stroke();
             }
-            ctx.restore();
 
+            // Tank Panzerung
+            if (cfg.id === 'tank') {
+                ctx.shadowBlur = 15; ctx.shadowColor = "#334155";
+                ctx.fillStyle = cfg.armorColor || "#1e293b";
+                ctx.beginPath(); ctx.arc(x, y, radius + 4, 0, Math.PI * 2); ctx.fill();
+            }
+
+            // Haupt-Blob Körper
+            ctx.shadowBlur = 15; ctx.shadowColor = mainColor;
+            ctx.fillStyle = mainColor;
+            ctx.beginPath(); ctx.arc(x, y, radius, 0, Math.PI * 2); ctx.fill();
+
+            // Agile Neon Streifen
+            if (cfg.id === 'agile') {
+                ctx.strokeStyle = "#fff"; ctx.lineWidth = 2;
+                ctx.beginPath(); ctx.arc(x, y, radius - 4, 0, Math.PI); ctx.stroke();
+            }
+
+            // Highlight Glanzpunkt
             ctx.fillStyle = "rgba(255,255,255,0.4)";
-            ctx.beginPath(); ctx.arc(player.x - 6, player.y - 6, 6, 0, Math.PI * 2); ctx.fill();
+            ctx.beginPath(); ctx.arc(x - 5, y - 5, radius * 0.3, 0, Math.PI * 2); ctx.fill();
+
+            // Klassen-Waffenlauf / Accessoires
+            ctx.strokeStyle = cfg.id === 'tank' ? "#334155" : "#fff";
+            ctx.lineWidth = cfg.id === 'sniper' ? 3 : (cfg.id === 'shotgun' ? 6 : 4);
+            let barrelLen = cfg.id === 'sniper' ? 32 : (cfg.id === 'shotgun' ? 20 : 24);
+            
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+            ctx.lineTo(x + Math.cos(angle) * (radius + barrelLen), y + Math.sin(angle) * (radius + barrelLen));
+            ctx.stroke();
+
+            ctx.restore();
         }
 
         function drawHealthBar(x, y, current, max) {
@@ -1076,6 +1244,52 @@
                 requestAnimationFrame(gameLoop);
             }
         }
+
+        // Hintergrund-Animation für das Hauptmenü
+        const menuCanvas = document.createElement("canvas");
+        menuCanvas.width = 450;
+        menuCanvas.height = 900;
+        const mCtx = menuCanvas.getContext("2d");
+        
+        let menuAnimTick = 0;
+        function animateMenuBackground() {
+            if (document.getElementById("start-screen").style.display !== "none") {
+                mCtx.fillStyle = "#0f172a";
+                mCtx.fillRect(0, 0, 450, 900);
+
+                // Gitter
+                mCtx.strokeStyle = "#1e293b";
+                mCtx.lineWidth = 1;
+                for (let x = 0; x <= 450; x += 40) {
+                    mCtx.beginPath(); mCtx.moveTo(x, 0); mCtx.lineTo(x, 900); mCtx.stroke();
+                }
+                for (let y = 0; y <= 900; y += 40) {
+                    mCtx.beginPath(); mCtx.moveTo(0, y); mCtx.lineTo(450, y); mCtx.stroke();
+                }
+
+                // Großer animierter Standard-Blob im Hintergrund
+                menuAnimTick += 0.03;
+                let blobX = 225 + Math.sin(menuAnimTick) * 30;
+                let blobY = 320 + Math.cos(menuAnimTick * 0.7) * 20;
+                let angle = menuAnimTick;
+
+                mCtx.save();
+                mCtx.shadowBlur = 25; mCtx.shadowColor = "#00f3ff";
+                mCtx.fillStyle = "#00f3ff";
+                mCtx.beginPath(); mCtx.arc(blobX, blobY, 45, 0, Math.PI * 2); mCtx.fill();
+                
+                mCtx.strokeStyle = "#fff"; mCtx.lineWidth = 6;
+                mCtx.beginPath(); mCtx.moveTo(blobX, blobY);
+                mCtx.lineTo(blobX + Math.cos(angle) * 55, blobY + Math.sin(angle) * 55);
+                mCtx.stroke();
+                mCtx.restore();
+
+                // Hintergrund auf Canvas spiegeln damit es lebendig wirkt
+                ctx.drawImage(menuCanvas, 0, 0, canvas.width, canvas.height);
+            }
+            requestAnimationFrame(animateMenuBackground);
+        }
+        requestAnimationFrame(animateMenuBackground);
     </script>
 </body>
 </html>
