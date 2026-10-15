@@ -42,7 +42,6 @@
             width: 100%;
             height: 100%;
         }
-        /* Weiches Fade-Overlay */
         #fade-overlay {
             position: absolute;
             top: 0;
@@ -107,11 +106,11 @@
             justify-content: space-between;
             text-align: center;
             z-index: 20;
-            padding: 30px 20px;
+            padding: 25px 20px;
             cursor: default;
         }
         #start-screen {
-            background: transparent; /* Lässt den animierten Canvas-Hintergrund durchscheinen */
+            background: #0f172a;
         }
         #menuBgCanvas {
             position: absolute;
@@ -137,32 +136,32 @@
         }
         .screen h1 {
             color: #00f3ff;
-            font-size: 34px;
-            margin: 10px 0 0 0;
+            font-size: 32px;
+            margin: 5px 0 0 0;
             text-shadow: 0 0 20px rgba(0,243,255,0.6);
             letter-spacing: 2px;
         }
-        /* Großes Vorschau-Layout für Blobs im Menü */
         .blob-showcase-box {
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 15px;
-            margin: 10px 0;
+            margin: 5px 0;
         }
         .arrow-btn {
-            background: rgba(15, 23, 42, 0.85);
+            background: rgba(15, 23, 42, 0.9);
             border: 2px solid #00f3ff;
             color: #00f3ff;
             font-size: 20px;
-            width: 48px;
-            height: 48px;
+            width: 45px;
+            height: 45px;
             border-radius: 50%;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
             box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+            flex-shrink: 0;
             transition: all 0.2s;
         }
         .arrow-btn:active {
@@ -171,60 +170,59 @@
             color: #000;
         }
         .preview-circle {
-            width: 140px;
-            height: 140px;
-            background: rgba(15, 23, 42, 0.8);
+            width: 130px;
+            height: 130px;
+            background: rgba(15, 23, 42, 0.9);
             border: 3px solid #334155;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 0 30px rgba(0,0,0,0.6), inset 0 0 20px rgba(0,0,0,0.8);
-            backdrop-filter: blur(5px);
+            box-shadow: 0 0 25px rgba(0,0,0,0.6), inset 0 0 15px rgba(0,0,0,0.8);
+            flex-shrink: 0;
         }
         #menuPreviewCanvas {
-            width: 120px;
-            height: 120px;
+            width: 110px;
+            height: 110px;
         }
         .class-desc-card {
-            background: rgba(15, 23, 42, 0.85);
+            background: rgba(15, 23, 42, 0.9);
             border: 2px solid #334155;
             border-radius: 14px;
-            padding: 12px 18px;
+            padding: 10px 16px;
             width: 100%;
             max-width: 340px;
             box-shadow: 0 8px 25px rgba(0,0,0,0.5);
-            backdrop-filter: blur(8px);
         }
         .class-desc-card h3 {
-            margin: 0 0 4px 0;
+            margin: 0 0 3px 0;
             color: #f8fafc;
-            font-size: 18px;
+            font-size: 17px;
         }
         .class-desc-card p {
             margin: 0;
-            font-size: 12px;
+            font-size: 11px;
             color: #94a3b8;
-            line-height: 1.4;
+            line-height: 1.3;
         }
         .menu-bottom-area {
             width: 100%;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
         }
         .btn {
             background: linear-gradient(135deg, #00f3ff, #0066ff);
             color: #fff;
             border: none;
-            padding: 16px 36px;
-            font-size: 18px;
+            padding: 15px 30px;
+            font-size: 17px;
             font-weight: bold;
             cursor: pointer;
             border-radius: 14px;
             box-shadow: 0 4px 25px rgba(0,243,255,0.4);
-            width: 260px;
+            width: 250px;
             transition: transform 0.1s;
         }
         .btn:active { transform: scale(0.96); }
@@ -232,32 +230,32 @@
             background: linear-gradient(135deg, #334155, #1e293b);
             border: 2px solid #475569;
             box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-            width: 200px;
-            padding: 12px 22px;
-            font-size: 15px;
+            width: 190px;
+            padding: 10px 20px;
+            font-size: 14px;
         }
         .other-screen {
-            background: rgba(11, 15, 25, 0.95);
+            background: rgba(11, 15, 25, 0.96);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             text-align: center;
             z-index: 20;
-            padding: 30px;
+            padding: 25px;
         }
         .shop-list {
             width: 100%;
-            max-height: 380px;
+            max-height: 350px;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
             gap: 10px;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             padding-right: 5px;
         }
         .shop-item {
-            background: rgba(30, 41, 59, 0.7);
+            background: rgba(30, 41, 59, 0.8);
             border: 2px solid #334155;
             padding: 12px 16px;
             border-radius: 12px;
@@ -265,10 +263,10 @@
             justify-content: space-between;
             align-items: center;
         }
-        .shop-info h3 { margin: 0 0 4px 0; font-size: 16px; color: #f8fafc; text-align: left; }
-        .shop-info p { margin: 0; font-size: 12px; color: #94a3b8; text-align: left; }
+        .shop-info h3 { margin: 0 0 4px 0; font-size: 15px; color: #f8fafc; text-align: left; }
+        .shop-info p { margin: 0; font-size: 11px; color: #94a3b8; text-align: left; }
         .buy-btn {
-            background: #f59e0b; color: #000; border: none; padding: 8px 16px; font-weight: bold; border-radius: 8px; cursor: pointer;
+            background: #f59e0b; color: #000; border: none; padding: 8px 14px; font-weight: bold; border-radius: 8px; cursor: pointer;
         }
         .buy-btn.equipped { background: #10b981; color: #fff; }
         .buy-btn.locked { background: #3b82f6; color: #fff; }
@@ -300,7 +298,6 @@
 <body>
 
     <div id="game-container">
-        <!-- Weiches Fade-Overlay -->
         <div id="fade-overlay"></div>
 
         <div id="ui-overlay">
@@ -316,11 +313,11 @@
             <div class="menu-content-wrapper">
                 <h1>BLOB ARENA</h1>
 
-                <!-- Große Blob-Vorschau mit Pfeilen -->
+                <!-- Große Blob-Vorschau -->
                 <div class="blob-showcase-box">
                     <button class="arrow-btn" onclick="changeClass(-1)">◀</button>
                     <div class="preview-circle">
-                        <canvas id="menuPreviewCanvas" width="120" height="120"></canvas>
+                        <canvas id="menuPreviewCanvas" width="110" height="110"></canvas>
                     </div>
                     <button class="arrow-btn" onclick="changeClass(1)">▶</button>
                 </div>
@@ -329,12 +326,12 @@
                 <div class="class-desc-card">
                     <h3 id="menu-class-name">Standard Blob</h3>
                     <p id="menu-class-desc">Ausgewogener Allrounder.</p>
-                    <p id="menu-class-status" style="margin-top: 6px; font-weight: bold; color: #10b981;"></p>
+                    <p id="menu-class-status" style="margin-top: 5px; font-weight: bold; color: #10b981;"></p>
                 </div>
 
-                <!-- Unterer Bereich mit Stats & Start-Button -->
+                <!-- Unterer Bereich -->
                 <div class="menu-bottom-area">
-                    <div style="font-size: 13px; color: #94a3b8; background: rgba(15,23,42,0.8); padding: 6px 12px; border-radius: 8px; border: 1px solid #334155;">
+                    <div style="font-size: 12px; color: #94a3b8; background: rgba(15,23,42,0.85); padding: 5px 10px; border-radius: 8px; border: 1px solid #334155;">
                         Level <span id="player-level" style="color: #00f3ff; font-weight: bold;">1</span> | XP: <span id="player-xp">0</span> / <span id="player-next-xp">500</span> | Coins: <span id="menu-coins" style="color: #f59e0b; font-weight: bold;">0</span> 🪙
                     </div>
                     <button class="btn" onclick="startGame()">SPIEL STARTEN</button>
@@ -345,10 +342,10 @@
 
         <!-- SKIN SHOP -->
         <div id="shop-screen" class="screen other-screen" style="display: none;">
-            <div style="width: 100%; max-width: 400px; display: flex; flex-direction: column; height: 100%; justify-content: space-between; padding: 10px 0;">
+            <div style="width: 100%; max-width: 380px; display: flex; flex-direction: column; height: 100%; justify-content: space-between; padding: 10px 0;">
                 <div>
                     <h1>SKIN SHOP</h1>
-                    <p style="color: #94a3b8; font-size: 13px; margin-bottom: 15px;">Wähle die Farbe deines Blobs (Accessoires bleiben unverändert)</p>
+                    <p style="color: #94a3b8; font-size: 12px; margin-bottom: 12px;">Wähle die Farbe deines Blobs (Accessoires bleiben unverändert)</p>
                     <p>Deine Coins: <span id="shop-coins-display" style="color: #f59e0b; font-weight: bold;">0</span> 🪙</p>
                     <div class="shop-list" id="shop-items-container"></div>
                 </div>
@@ -361,7 +358,7 @@
         <!-- PAUSE MENÜ -->
         <div id="pause-screen" class="screen other-screen" style="display: none;">
             <h1>PAUSE</h1>
-            <div style="display: flex; flex-direction: column; gap: 12px; align-items: center; width: 100%; max-width: 250px; margin-top: 20px;">
+            <div style="display: flex; flex-direction: column; gap: 12px; align-items: center; width: 100%; max-width: 250px;">
                 <button class="btn" onclick="resumeGame()">Weiter spielen</button>
                 <button class="btn btn-secondary" onclick="startGame()">Erneut Versuchen</button>
                 <button class="btn btn-secondary" onclick="goHome()">Hauptmenü</button>
@@ -371,7 +368,7 @@
         <!-- GAME OVER / GEWONNEN -->
         <div id="end-screen" class="screen other-screen" style="display: none;">
             <h1 id="end-title">GAME OVER</h1>
-            <p id="end-message" style="font-size: 15px; margin: 15px 0; color: #94a3b8;"></p>
+            <p id="end-message" style="font-size: 14px; margin: 15px 0; color: #94a3b8;"></p>
             <div class="end-buttons">
                 <button class="icon-btn" id="retry-btn" onclick="startGame()" title="Retry">↺</button>
                 <button class="icon-btn" id="home-btn" onclick="goHome()" title="Home">⌂</button>
@@ -495,43 +492,15 @@
                 {type: 'wall', x: 680, y: 650, w: 20, h: 300},
                 {type: 'water', x: 150, y: 850, w: 100, h: 100, r: 20},
                 {type: 'water', x: 650, y: 200, w: 100, h: 100, r: 20}
-            ],
-            [
-                {type: 'wall', x: 300, y: 400, w: 300, h: 20},
-                {type: 'wall', x: 300, y: 780, w: 300, h: 20},
-                {type: 'water', x: 120, y: 550, w: 100, h: 100, r: 25},
-                {type: 'water', x: 680, y: 550, w: 100, h: 100, r: 25}
-            ],
-            [
-                {type: 'water', x: 200, y: 200, w: 120, h: 120, r: 25},
-                {type: 'water', x: 580, y: 200, w: 120, h: 120, r: 25},
-                {type: 'water', x: 200, y: 880, w: 120, h: 120, r: 25},
-                {type: 'water', x: 580, y: 880, w: 120, h: 120, r: 25},
-                {type: 'wall', x: 400, y: 500, w: 100, h: 200, r: 15}
-            ],
-            [
-                {type: 'wall', x: 150, y: 350, w: 200, h: 20},
-                {type: 'wall', x: 550, y: 850, w: 200, h: 20},
-                {type: 'water', x: 380, y: 530, w: 140, h: 140, r: 35},
-                {type: 'wall', x: 440, y: 200, w: 20, h: 200},
-                {type: 'wall', x: 440, y: 800, w: 20, h: 200}
             ]
         ];
 
         let currentMap = [];
-
         let player = {
-            x: worldWidth / 2,
-            y: worldHeight / 2,
-            vx: 0,
-            vy: 0,
-            radius: 20,
-            hp: 10,
-            maxHp: 10,
-            speed: 4,
-            angle: 0,
-            shootCooldown: 0,
-            maxCooldown: 35,
+            x: worldWidth / 2, y: worldHeight / 2,
+            vx: 0, vy: 0, radius: 20,
+            hp: 10, maxHp: 10, speed: 4,
+            angle: 0, shootCooldown: 0, maxCooldown: 35,
             classConfig: blobClasses[0]
         };
 
@@ -539,7 +508,6 @@
         let enemies = [];
         let floatTexts = [];
         let particles = [];
-
         let mouse = { x: 0, y: 0, down: false };
         let joystick = { active: false, x: 0, y: 0, dx: 0, dy: 0, maxDist: 38 };
         let keys = {};
@@ -561,7 +529,6 @@
             mouse.down = true;
             shootPlayerBullet();
         });
-
         window.addEventListener("mouseup", () => { mouse.down = false; });
 
         const pad = document.getElementById("joystick-pad");
@@ -707,8 +674,7 @@
                 document.getElementById("mobile-controls").style.display = "flex";
                 document.getElementById("pause-btn").style.display = "flex";
 
-                const randomIndex = Math.floor(Math.random() * mapsList.length);
-                currentMap = mapsList[randomIndex];
+                currentMap = mapsList[Math.floor(Math.random() * mapsList.length)];
 
                 player.classConfig = chosenClass;
                 player.radius = chosenClass.radius;
@@ -740,9 +706,7 @@
                 gameRunning = true;
                 requestAnimationFrame(gameLoop);
 
-                setTimeout(() => {
-                    fadeOverlay.style.opacity = "0";
-                }, 50);
+                setTimeout(() => { fadeOverlay.style.opacity = "0"; }, 50);
             }, 200);
         }
 
@@ -759,9 +723,7 @@
                 document.getElementById("start-screen").style.display = "flex";
                 updateMenuDisplay();
 
-                setTimeout(() => {
-                    fadeOverlay.style.opacity = "0";
-                }, 50);
+                setTimeout(() => { fadeOverlay.style.opacity = "0"; }, 50);
             }, 200);
         }
 
@@ -777,9 +739,7 @@
                 if (attempts > 50) break;
             } while (!safe);
 
-            let eTypeIndex = Math.floor(Math.random() * blobClasses.length);
-            let eConfig = blobClasses[eTypeIndex];
-
+            let eConfig = blobClasses[Math.floor(Math.random() * blobClasses.length)];
             enemies.push({
                 x: ex, y: ey,
                 radius: eConfig.radius,
@@ -798,55 +758,45 @@
             for (let obs of currentMap) {
                 let closestX = Math.max(obs.x, Math.min(x, obs.x + obs.w));
                 let closestY = Math.max(obs.y, Math.min(y, obs.y + obs.h));
-                let distX = x - closestX;
-                let distY = y - closestY;
-                if ((distX * distX + distY * distY) < (radius * radius)) return true;
+                if (((x - closestX) ** 2 + (y - closestY) ** 2) < (radius ** 2)) return true;
             }
             return false;
         }
 
         function hasLineOfSight(x1, y1, x2, y2) {
-            let steps = 12;
-            for (let s = 1; s <= steps; s++) {
-                let t = s / steps;
-                let cx = x1 + (x2 - x1) * t;
-                let cy = y1 + (y2 - y1) * t;
-                if (checkCollisionWithObstacles(cx, cy, 5)) return false;
+            for (let s = 1; s <= 12; s++) {
+                let t = s / 12;
+                if (checkCollisionWithObstacles(x1 + (x2 - x1) * t, y1 + (y2 - y1) * t, 5)) return false;
             }
             return true;
         }
 
         function moveWithCollision(entity, dx, dy) {
             entity.x += dx;
-            if (checkCollisionWithObstacles(entity.x, entity.y, entity.radius)) { entity.x -= dx; }
+            if (checkCollisionWithObstacles(entity.x, entity.y, entity.radius)) entity.x -= dx;
             entity.y += dy;
-            if (checkCollisionWithObstacles(entity.x, entity.y, entity.radius)) { entity.y -= dy; }
+            if (checkCollisionWithObstacles(entity.x, entity.y, entity.radius)) entity.y -= dy;
         }
 
         function shootPlayerBullet() {
-            if (!gameRunning || isPaused) return;
-            if (player.shootCooldown > 0) return;
-
+            if (!gameRunning || isPaused || player.shootCooldown > 0) return;
             player.shootCooldown = player.maxCooldown;
-            let angle = player.angle;
             let cfg = player.classConfig;
 
             if (cfg.id === 'shotgun') {
                 for (let spread of [-0.25, 0, 0.25]) {
-                    let a = angle + spread;
+                    let a = player.angle + spread;
                     bullets.push({
                         x: player.x, y: player.y,
                         dx: Math.cos(a) * cfg.bulletSpeed, dy: Math.sin(a) * cfg.bulletSpeed,
-                        radius: cfg.bulletSize, color: cfg.color,
-                        fromPlayer: true, shooterIndex: -1
+                        radius: cfg.bulletSize, color: cfg.color, fromPlayer: true, shooterIndex: -1
                     });
                 }
             } else {
                 bullets.push({
                     x: player.x, y: player.y,
-                    dx: Math.cos(angle) * cfg.bulletSpeed, dy: Math.sin(angle) * cfg.bulletSpeed,
-                    radius: cfg.bulletSize, color: cfg.color,
-                    fromPlayer: true, shooterIndex: -1
+                    dx: Math.cos(player.angle) * cfg.bulletSpeed, dy: Math.sin(player.angle) * cfg.bulletSpeed,
+                    radius: cfg.bulletSize, color: cfg.color, fromPlayer: true, shooterIndex: -1
                 });
             }
         }
@@ -874,32 +824,26 @@
             document.getElementById("pause-btn").style.display = "none";
             document.getElementById("end-screen").style.display = "flex";
 
-            const title = document.getElementById("end-title");
-            const msg = document.getElementById("end-message");
-
-            let baseXP = won ? 120 : 30;
-            let killXP = kills > 0 ? Math.floor(25 * Math.pow(kills, 1.4)) : 0;
-            let earnedXP = baseXP + killXP;
+            let earnedXP = (won ? 120 : 30) + (kills > 0 ? Math.floor(25 * Math.pow(kills, 1.4)) : 0);
             totalXP += earnedXP;
             localStorage.setItem('blob_xp', totalXP);
 
             if (won) {
-                title.innerText = "GEWONNEN!";
-                title.style.color = "#10b981";
+                document.getElementById("end-title").innerText = "GEWONNEN!";
+                document.getElementById("end-title").style.color = "#10b981";
                 let earnedCoins = Math.floor(Math.random() * 11) + 10;
                 coins += earnedCoins;
                 updateMenuDisplay();
-                msg.innerText = `Du hast alle Gegner vernichtet!\n+${earnedCoins} Coins 🪙 | +${earnedXP} XP ✨`;
+                document.getElementById("end-message").innerText = `Du hast alle Gegner vernichtet!\n+${earnedCoins} Coins 🪙 | +${earnedXP} XP ✨`;
             } else {
-                title.innerText = "GAME OVER";
-                title.style.color = "#ff3366";
-                msg.innerText = `Du hast ${kills} Gegner besiegt!\n+${earnedXP} XP ✨ erhalten.`;
+                document.getElementById("end-title").innerText = "GAME OVER";
+                document.getElementById("end-title").style.color = "#ff3366";
+                document.getElementById("end-message").innerText = `Du hast ${kills} Gegner besiegt!\n+${earnedXP} XP ✨ erhalten.`;
             }
         }
 
         function update() {
             if (!gameRunning || isPaused) return;
-
             document.getElementById("remaining-players").innerText = enemies.length + 1;
 
             if (player.shootCooldown > 0) player.shootCooldown--;
@@ -907,17 +851,14 @@
 
             let moveX = joystick.dx;
             let moveY = joystick.dy;
-
             if (keys['w'] || keys['arrowup']) moveY = -1;
             if (keys['s'] || keys['arrowdown']) moveY = 1;
             if (keys['a'] || keys['arrowleft']) moveX = -1;
             if (keys['d'] || keys['arrowright']) moveX = 1;
 
-            // Schwammige/Flüssige Steuerung mit Trägheit
-            let targetVx = moveX * player.speed;
-            let targetVy = moveY * player.speed;
-            player.vx += (targetVx - player.vx) * 0.12;
-            player.vy += (targetVy - player.vy) * 0.12;
+            // Schwammige/Flüssige Trägheitssteuerung
+            player.vx += (moveX * player.speed - player.vx) * 0.12;
+            player.vy += (moveY * player.speed - player.vy) * 0.12;
 
             if (Math.abs(player.vx) > 0.01 || Math.abs(player.vy) > 0.01) {
                 if (joystick.active && (moveX !== 0 || moveY !== 0)) {
@@ -932,7 +873,6 @@
             for (let i = bullets.length - 1; i >= 0; i--) {
                 let b = bullets[i];
                 b.x += b.dx; b.y += b.dy;
-
                 if (b.x < 0 || b.x > worldWidth || b.y < 0 || b.y > worldHeight || checkCollisionWithObstacles(b.x, b.y, b.radius)) {
                     createParticles(b.x, b.y, b.color);
                     bullets.splice(i, 1);
@@ -944,11 +884,9 @@
                     for (let j = enemies.length - 1; j >= 0; j--) {
                         let en = enemies[j];
                         if (Math.hypot(b.x - en.x, b.y - en.y) < b.radius + en.radius) {
-                            en.hp -= 1;
-                            hit = true;
+                            en.hp -= 1; hit = true;
                             createParticles(en.x, en.y, "#ff3366");
                             addFloatText("-1 HP", en.x, en.y - 20, "#00f3ff");
-
                             if (en.hp <= 0) {
                                 enemies.splice(j, 1);
                                 kills++;
@@ -968,73 +906,27 @@
                         if (player.hp <= 0) gameOver(false);
                         continue;
                     }
-
-                    let botHit = false;
-                    for (let j = enemies.length - 1; j >= 0; j--) {
-                        if (b.shooterIndex === j) continue;
-                        let en = enemies[j];
-                        if (Math.hypot(b.x - en.x, b.y - en.y) < b.radius + en.radius) {
-                            en.hp -= 1;
-                            botHit = true;
-                            createParticles(en.x, en.y, "#ff3366");
-                            addFloatText("-1 HP", en.x, en.y - 20, "#ff00ff");
-                            if (en.hp <= 0) {
-                                enemies.splice(j, 1);
-                                if (enemies.length === 0) gameOver(true);
-                            }
-                            break;
-                        }
-                    }
-                    if (botHit) { bullets.splice(i, 1); continue; }
                 }
             }
 
             for (let i = enemies.length - 1; i >= 0; i--) {
                 let en = enemies[i];
-                let targetX = player.x;
-                let targetY = player.y;
                 let distToPlayer = Math.hypot(player.x - en.x, player.y - en.y);
-                let closestDist = distToPlayer;
-                let targetIsPlayer = true;
-
-                for (let j = 0; j < enemies.length; j++) {
-                    if (i === j) continue;
-                    let other = enemies[j];
-                    let distToOther = Math.hypot(other.x - en.x, other.y - en.y);
-                    if (distToOther < closestDist) {
-                        closestDist = distToOther;
-                        targetX = other.x;
-                        targetY = other.y;
-                        targetIsPlayer = false;
-                    }
-                }
-
-                let angleToTarget = Math.atan2(targetY - en.y, targetX - en.x);
+                let angleToTarget = Math.atan2(player.y - en.y, player.x - en.x);
                 en.wanderAngle += (Math.random() - 0.5) * 0.5;
 
-                let hasLOS = hasLineOfSight(en.x, en.y, targetX, targetY);
-
-                let sepX = 0, sepY = 0;
-                for (let j = 0; j < enemies.length; j++) {
-                    if (i === j) continue;
-                    let other = enemies[j];
-                    let d = Math.hypot(other.x - en.x, other.y - en.y);
-                    if (d < 45 && d > 0) {
-                        sepX += (en.x - other.x) / d;
-                        sepY += (en.y - other.y) / d;
-                    }
-                }
-
+                let hasLOS = hasLineOfSight(en.x, en.y, player.x, player.y);
                 let moveX = 0, moveY = 0;
+
                 if (!hasLOS) {
                     let peekAngle = angleToTarget + (Math.PI / 2) * en.strafeDir;
                     moveX = Math.cos(peekAngle) * (en.speed * 0.9);
                     moveY = Math.sin(peekAngle) * (en.speed * 0.9);
                 } else {
-                    if (closestDist > en.preferredDist + 20) {
+                    if (distToPlayer > en.preferredDist + 20) {
                         moveX = Math.cos(angleToTarget) * (en.speed * 0.8);
                         moveY = Math.sin(angleToTarget) * (en.speed * 0.8);
-                    } else if (closestDist < en.preferredDist - 20) {
+                    } else if (distToPlayer < en.preferredDist - 20) {
                         moveX = -Math.cos(angleToTarget) * (en.speed * 0.6);
                         moveY = -Math.sin(angleToTarget) * (en.speed * 0.6);
                     } else {
@@ -1044,11 +936,7 @@
                     }
                 }
 
-                let finalMoveX = moveX + sepX * 1.8 + Math.cos(en.wanderAngle) * 0.5;
-                let finalMoveY = moveY + sepY * 1.8 + Math.sin(en.wanderAngle) * 0.5;
-
-                moveWithCollision(en, finalMoveX, finalMoveY);
-
+                moveWithCollision(en, moveX + Math.cos(en.wanderAngle) * 0.5, moveY + Math.sin(en.wanderAngle) * 0.5);
                 en.x = Math.max(en.radius, Math.min(worldWidth - en.radius, en.x));
                 en.y = Math.max(en.radius, Math.min(worldHeight - en.radius, en.y));
 
@@ -1057,11 +945,11 @@
                     en.shootCooldown = Math.random() * 60 + 30;
                     if (hasLOS) {
                         let shootAngle = angleToTarget + (Math.random() - 0.5) * 0.3;
-                        let ec = en.classConfig;
                         bullets.push({
                             x: en.x, y: en.y,
-                            dx: Math.cos(shootAngle) * ec.bulletSpeed, dy: Math.sin(shootAngle) * ec.bulletSpeed,
-                            radius: ec.bulletSize, color: targetIsPlayer ? "#ff9900" : "#ff00ff",
+                            dx: Math.cos(shootAngle) * en.classConfig.bulletSpeed,
+                            dy: Math.sin(shootAngle) * en.classConfig.bulletSpeed,
+                            radius: en.classConfig.bulletSize, color: "#ff9900",
                             fromPlayer: false, shooterIndex: i
                         });
                     }
@@ -1080,22 +968,33 @@
             }
         }
 
+        function drawRoundedRect(targetCtx, x, y, w, h, r) {
+            targetCtx.beginPath();
+            targetCtx.moveTo(x + r, y);
+            targetCtx.lineTo(x + w - r, y);
+            targetCtx.quadraticCurveTo(x + w, y, x + w, y + r);
+            targetCtx.lineTo(x + w, y + h - r);
+            targetCtx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+            targetCtx.lineTo(x + r, y + h);
+            targetCtx.quadraticCurveTo(x, y + h, x, y + h - r);
+            targetCtx.lineTo(x, y + r);
+            targetCtx.quadraticCurveTo(x, y, x + r, y);
+            targetCtx.closePath();
+        }
+
         function draw() {
             ctx.fillStyle = "#0f172a";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
             ctx.save();
-            let camX = canvas.width / 2 - player.x;
-            let camY = canvas.height / 2 - player.y;
-            ctx.translate(camX, camY);
+            ctx.translate(canvas.width / 2 - player.x, canvas.height / 2 - player.y);
 
             ctx.strokeStyle = "#1e293b";
             ctx.lineWidth = 1;
-            const gridSize = 40;
-            for (let x = 0; x <= worldWidth; x += gridSize) {
+            for (let x = 0; x <= worldWidth; x += 40) {
                 ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, worldHeight); ctx.stroke();
             }
-            for (let y = 0; y <= worldHeight; y += gridSize) {
+            for (let y = 0; y <= worldHeight; y += 40) {
                 ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(worldWidth, y); ctx.stroke();
             }
 
@@ -1105,12 +1004,12 @@
                     ctx.shadowBlur = 15; ctx.shadowColor = "#00f3ff";
                     ctx.fillStyle = "rgba(14, 116, 144, 0.65)";
                     ctx.strokeStyle = "#00f3ff"; ctx.lineWidth = 3;
-                    ctx.beginPath(); ctx.roundRect(obs.x, obs.y, obs.w, obs.h, obs.r || 20); ctx.fill(); ctx.stroke();
+                    drawRoundedRect(ctx, obs.x, obs.y, obs.w, obs.h, obs.r || 20); ctx.fill(); ctx.stroke();
                 } else {
                     ctx.shadowBlur = 12; ctx.shadowColor = "#3b82f6";
                     ctx.fillStyle = "#1e293b";
                     ctx.strokeStyle = "#3b82f6"; ctx.lineWidth = 3;
-                    ctx.beginPath(); ctx.roundRect(obs.x, obs.y, obs.w, obs.h, 8); ctx.fill(); ctx.stroke();
+                    drawRoundedRect(ctx, obs.x, obs.y, obs.w, obs.h, 8); ctx.fill(); ctx.stroke();
                 }
                 ctx.restore();
             }
@@ -1124,7 +1023,7 @@
                 drawHealthBar(en.x, en.y - en.radius - 12, en.hp, en.maxHp);
             }
 
-            drawBlobWithAccessories(ctx, player.x, player.y, player.radius, player.angle, player.classConfig, skins[selectedSkin]?.color || "#00f3ff", true);
+            drawBlobWithAccessories(ctx, player.x, player.y, player.radius, player.angle, player.classConfig, skins[selectedSkin] ? skins[selectedSkin].color : "#00f3ff", true);
             drawHealthBar(player.x, player.y - player.radius - 12, player.hp, player.maxHp);
 
             for (let b of bullets) {
@@ -1156,9 +1055,8 @@
             targetCtx.save();
 
             if (isPlayer) {
-                let laserLength = 170;
-                let endX = x + Math.cos(angle) * laserLength;
-                let endY = y + Math.sin(angle) * laserLength;
+                let endX = x + Math.cos(angle) * 170;
+                let endY = y + Math.sin(angle) * 170;
                 let grad = targetCtx.createLinearGradient(x, y, endX, endY);
                 grad.addColorStop(0, "rgba(0, 243, 255, 0.9)");
                 grad.addColorStop(0.6, "rgba(0, 243, 255, 0.3)");
@@ -1177,30 +1075,20 @@
             if (cfg.id === 'tank') {
                 targetCtx.shadowBlur = 15; targetCtx.shadowColor = "#1e293b";
                 targetCtx.fillStyle = "#334155";
-                targetCtx.beginPath();
-                targetCtx.arc(x, y, radius + 5, 0, Math.PI * 2);
-                targetCtx.fill();
-                targetCtx.strokeStyle = "#1e293b";
-                targetCtx.lineWidth = 3;
-                targetCtx.stroke();
+                targetCtx.beginPath(); targetCtx.arc(x, y, radius + 5, 0, Math.PI * 2); targetCtx.fill();
+                targetCtx.strokeStyle = "#1e293b"; targetCtx.lineWidth = 3; targetCtx.stroke();
             } else if (cfg.id === 'agile') {
                 targetCtx.strokeStyle = "#84cc16";
                 targetCtx.lineWidth = 2.5;
-                targetCtx.beginPath();
-                targetCtx.arc(x, y, radius + 3, 0, Math.PI * 2);
-                targetCtx.stroke();
+                targetCtx.beginPath(); targetCtx.arc(x, y, radius + 3, 0, Math.PI * 2); targetCtx.stroke();
             }
 
             targetCtx.shadowBlur = 15; targetCtx.shadowColor = baseColor;
             targetCtx.fillStyle = baseColor;
-            targetCtx.beginPath();
-            targetCtx.arc(x, y, radius, 0, Math.PI * 2);
-            targetCtx.fill();
+            targetCtx.beginPath(); targetCtx.arc(x, y, radius, 0, Math.PI * 2); targetCtx.fill();
 
             targetCtx.fillStyle = "rgba(255,255,255,0.4)";
-            targetCtx.beginPath();
-            targetCtx.arc(x - 5, y - 5, radius * 0.3, 0, Math.PI * 2);
-            targetCtx.fill();
+            targetCtx.beginPath(); targetCtx.arc(x - 5, y - 5, radius * 0.3, 0, Math.PI * 2); targetCtx.fill();
 
             if (cfg.id === 'tank') {
                 targetCtx.fillStyle = "#94a3b8";
@@ -1208,19 +1096,15 @@
                 targetCtx.fillRect(x - 6, y + radius - 2, 12, 4);
             } else if (cfg.id === 'agile') {
                 targetCtx.fillStyle = "#22c55e";
-                targetCtx.beginPath();
-                targetCtx.arc(x + Math.cos(angle) * 6, y + Math.sin(angle) * 6, 4, 0, Math.PI * 2);
-                targetCtx.fill();
+                targetCtx.beginPath(); targetCtx.arc(x + Math.cos(angle) * 6, y + Math.sin(angle) * 6, 4, 0, Math.PI * 2); targetCtx.fill();
             } else if (cfg.id === 'shotgun') {
-                targetCtx.strokeStyle = "#b45309";
-                targetCtx.lineWidth = 5;
+                targetCtx.strokeStyle = "#b45309"; targetCtx.lineWidth = 5;
                 targetCtx.beginPath();
                 targetCtx.moveTo(x - radius * 0.7, y - radius * 0.7);
                 targetCtx.lineTo(x + radius * 0.7, y + radius * 0.7);
                 targetCtx.stroke();
             } else if (cfg.id === 'sniper') {
-                targetCtx.strokeStyle = "#eab308";
-                targetCtx.lineWidth = 3;
+                targetCtx.strokeStyle = "#eab308"; targetCtx.lineWidth = 3;
                 targetCtx.beginPath();
                 targetCtx.moveTo(x, y - radius);
                 targetCtx.lineTo(x, y - radius - 8);
@@ -1243,9 +1127,8 @@
             const barWidth = 40; const barHeight = 6;
             ctx.fillStyle = "rgba(0,0,0,0.6)";
             ctx.fillRect(x - barWidth / 2, y, barWidth, barHeight);
-            const healthWidth = (current / max) * barWidth;
             ctx.fillStyle = current > 3 ? "#10b981" : "#ef4444";
-            ctx.fillRect(x - barWidth / 2, y, healthWidth, barHeight);
+            ctx.fillRect(x - barWidth / 2, y, (current / max) * barWidth, barHeight);
         }
 
         function gameLoop() {
@@ -1257,35 +1140,31 @@
             }
         }
 
-        // Animierter Hintergrund & Live-Vorschau im Hauptmenü
         let menuAnimTick = 0;
         function renderMenuBackground() {
             if (document.getElementById("start-screen").style.display !== "none") {
                 mCtx.fillStyle = "#0f172a";
                 mCtx.fillRect(0, 0, menuBgCanvas.width, menuBgCanvas.height);
 
-                // Gitter zeichnen
                 mCtx.strokeStyle = "#1e293b";
                 mCtx.lineWidth = 1;
-                const gSize = 40;
-                for (let x = 0; x <= menuBgCanvas.width; x += gSize) {
+                for (let x = 0; x <= menuBgCanvas.width; x += 40) {
                     mCtx.beginPath(); mCtx.moveTo(x, 0); mCtx.lineTo(x, menuBgCanvas.height); mCtx.stroke();
                 }
-                for (let y = 0; y <= menuBgCanvas.height; y += gSize) {
+                for (let y = 0; y <= menuBgCanvas.height; y += 40) {
                     mCtx.beginPath(); mCtx.moveTo(0, y); mCtx.lineTo(menuBgCanvas.width, y); mCtx.stroke();
                 }
 
-                // Große Blob-Vorschau im Kreis zeichnen
-                pCtx.clearRect(0, 0, 120, 120);
-                pCtx.fillStyle = "rgba(15, 23, 42, 0.8)";
-                pCtx.fillRect(0, 0, 120, 120);
+                pCtx.clearRect(0, 0, 110, 110);
+                pCtx.fillStyle = "rgba(15, 23, 42, 0.9)";
+                pCtx.fillRect(0, 0, 110, 110);
 
                 menuAnimTick += 0.04;
                 let previewAngle = Math.sin(menuAnimTick) * 0.6;
                 let currentClass = blobClasses[selectedClassIndex];
-                let skinColor = skins[selectedSkin]?.color || "#00f3ff";
+                let skinColor = skins[selectedSkin] ? skins[selectedSkin].color : "#00f3ff";
 
-                drawBlobWithAccessories(pCtx, 60, 60, currentClass.radius * 1.3, previewAngle, currentClass, skinColor, false);
+                drawBlobWithAccessories(pCtx, 55, 55, currentClass.radius * 1.3, previewAngle, currentClass, skinColor, false);
             }
             requestAnimationFrame(renderMenuBackground);
         }
