@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Blob Arena - Shop & Skins</title>
+    <title>Blob Arena - Mobile Portrait</title>
     <style>
         * {
             box-sizing: border-box;
@@ -251,7 +251,7 @@
         <!-- Hauptmenü -->
         <div id="start-screen" class="screen">
             <h1>BLOB ARENA</h1>
-            <p>Besiege alle Gegner in der Arena und schalte krasse Skins frei!<br><br>Coins: <span id="menu-coins" style="color: #f59e0b; font-weight: bold;">0</span> 🪙</p>
+            <p>Überlebe das FFA-Gefecht und schalte krasse Skins frei!<br><br>Coins: <span id="menu-coins" style="color: #f59e0b; font-weight: bold;">0</span> 🪙</p>
             <button class="btn" onclick="startGame()">SPIEL STARTEN</button>
             <button class="btn btn-secondary" onclick="openShop()">SHOP</button>
         </div>
@@ -297,7 +297,6 @@
         window.addEventListener('resize', resizeCanvas);
         resizeCanvas();
 
-        // Coins & Skins Speicherung
         let coins = parseInt(localStorage.getItem('blob_coins')) || 0;
         let unlockedSkins = JSON.parse(localStorage.getItem('blob_unlocked_skins')) || ['default'];
         let selectedSkin = localStorage.getItem('blob_selected_skin') || 'default';
@@ -306,7 +305,7 @@
             default: { name: "Standard Blob", price: 0, color: "#00f3ff", type: "basic" },
             neon_green: { name: "Toxic Green", price: 50, color: "#10b981", type: "basic" },
             hot_pink: { name: "Laser Pink", price: 75, color: "#ec4899", type: "basic" },
-            gold_royale: { name: "Gold Royale", price: 150, color: "#f59e0b", glow: "#fbbf24", type: "epic" },
+            gold_royale: { name: "Gold Royale", price: 150, color: "#f59e0b", type: "epic" },
             plasma_core: { name: "Plasma Core", price: 250, color: "#8b5cf6", core: "#00f3ff", type: "legendary" },
             galaxy_void: { name: "Galaxy Void", price: 400, color: "#3b82f6", secondary: "#ec4899", type: "legendary" }
         };
@@ -491,7 +490,6 @@
             particles = [];
             document.getElementById("kill-count").innerText = kills;
 
-            // 15 Gegner für eine klare Match-Runde (damit man gewinnen kann)
             for (let i = 0; i < 15; i++) spawnEnemy();
 
             gameRunning = true;
@@ -509,9 +507,9 @@
                 x: ex, y: ey,
                 radius: 20,
                 hp: 10, maxHp: 10,
-                speed: 1.2 + Math.random() * 1.3,
-                preferredDist: 70 + Math.random() * 110,
-                shootCooldown: Math.random() * 80 + 40,
+                speed: 1.5 + Math.random() * 1.0,
+                preferredDist: 80 + Math.random() * 60,
+                shootCooldown: Math.random() * 70 + 40,
                 wanderAngle: Math.random() * Math.PI * 2,
                 color: "#ff3366"
             });
@@ -556,7 +554,7 @@
             if (won) {
                 title.innerText = "GEWONNEN!";
                 title.style.color = "#10b981";
-                let earnedCoins = Math.floor(Math.random() * 11) + 10; // 10 bis 20 Coins
+                let earnedCoins = Math.floor(Math.random() * 11) + 10;
                 coins += earnedCoins;
                 updateCoinDisplay();
                 msg.innerText = `Du hast alle Gegner vernichtet!\n+${earnedCoins} Coins erhalten 🪙`;
@@ -570,7 +568,6 @@
         function update() {
             if (!gameRunning) return;
 
-            // Restliche Spieler aktualisieren (1 Spieler + verbleibende Bots)
             document.getElementById("remaining-players").innerText = enemies.length + 1;
 
             let moveX = joystick.dx;
@@ -615,7 +612,6 @@
                                 kills++;
                                 document.getElementById("kill-count").innerText = kills;
 
-                                // SIEG PRÜFUNG: Wenn alle Gegner weg sind -> Gewonnen!
                                 if (enemies.length === 0) {
                                     gameOver(true);
                                 }
@@ -638,7 +634,7 @@
                         continue;
                     }
 
-                    // Bot trifft Bot (FFA)
+                    // Bot trifft Bot (FFA mit neuem Movement)
                     let botHit = false;
                     for (let j = enemies.length - 1; j >= 0; j--) {
                         if (b.shooterIndex === j) continue;
@@ -662,7 +658,7 @@
                 }
             }
 
-            // Gegner-KI
+            // NEUE GEGNER-KI (mit Umkreisen / Strafing)
             for (let i = enemies.length - 1; i >= 0; i--) {
                 let en = enemies[i];
                 let targetX = player.x;
@@ -685,27 +681,39 @@
 
                 let angleToTarget = Math.atan2(targetY - en.y, targetX - en.x);
                 en.wanderAngle += (Math.random() - 0.5) * 0.4;
-                let effectiveAngle = angleToTarget + Math.sin(en.wanderAngle) * 0.4;
+                let effectiveAngle = angleToTarget + Math.sin(en.wanderAngle) * 0.3;
 
+                // Bewegungslogik mit dynamischem Umkreisen (Strafing)
                 if (targetIsPlayer) {
-                    if (distToPlayer > en.preferredDist) {
-                        en.x += Math.cos(effectiveAngle) * en.speed;
-                        en.y += Math.sin(effectiveAngle) * en.speed;
-                    } else if (distToPlayer < en.preferredDist - 30) {
-                        en.x -= Math.cos(effectiveAngle) * (en.speed * 0.6);
-                        en.y -= Math.sin(effectiveAngle) * (en.speed * 0.6);
-                    }
-                } else {
-                    if (closestDist > 80) {
+                    if (distToPlayer > 90) {
                         en.x += Math.cos(effectiveAngle) * (en.speed * 0.8);
                         en.y += Math.sin(effectiveAngle) * (en.speed * 0.8);
+                    } else if (distToPlayer < 60) {
+                        en.x -= Math.cos(effectiveAngle) * (en.speed * 0.6);
+                        en.y -= Math.sin(effectiveAngle) * (en.speed * 0.6);
+                    } else {
+                        let strafeAngle = angleToTarget + Math.PI / 2;
+                        en.x += Math.cos(strafeAngle) * (en.speed * 0.7);
+                        en.y += Math.sin(strafeAngle) * (en.speed * 0.7);
+                    }
+                } else {
+                    if (closestDist > 90) {
+                        en.x += Math.cos(effectiveAngle) * (en.speed * 0.8);
+                        en.y += Math.sin(effectiveAngle) * (en.speed * 0.8);
+                    } else if (closestDist < 60) {
+                        en.x -= Math.cos(effectiveAngle) * (en.speed * 0.6);
+                        en.y -= Math.sin(effectiveAngle) * (en.speed * 0.6);
+                    } else {
+                        let strafeAngle = angleToTarget + Math.PI / 2;
+                        en.x += Math.cos(strafeAngle) * (en.speed * 0.7);
+                        en.y += Math.sin(strafeAngle) * (en.speed * 0.7);
                     }
                 }
 
                 en.shootCooldown--;
                 if (en.shootCooldown <= 0) {
-                    en.shootCooldown = Math.random() * 80 + 50;
-                    let shootAngle = Math.atan2(targetY - en.y, targetX - en.x) + (Math.random() - 0.5) * 0.4;
+                    en.shootCooldown = Math.random() * 70 + 40;
+                    let shootAngle = Math.atan2(targetY - en.y, targetX - en.x) + (Math.random() - 0.5) * 0.3;
                     bullets.push({
                         x: en.x, y: en.y,
                         dx: Math.cos(shootAngle) * 4.5, dy: Math.sin(shootAngle) * 4.5,
@@ -736,7 +744,6 @@
             let camY = canvas.height / 2 - player.y;
             ctx.translate(camX, camY);
 
-            // Gitter
             ctx.strokeStyle = "#1e293b";
             ctx.lineWidth = 1;
             const gridSize = 40;
@@ -764,10 +771,7 @@
                 drawHealthBar(en.x, en.y - en.radius - 12, en.hp, en.maxHp);
             }
 
-            // Spieler mit Skin rendern
             drawPlayerSkin();
-
-            // Spieler Lebensbalken direkt über der Kugel
             drawHealthBar(player.x, player.y - player.radius - 12, player.hp, player.maxHp);
 
             // Kugeln
@@ -779,14 +783,12 @@
                 ctx.restore();
             }
 
-            // Partikel
             for (let p of particles) {
                 ctx.fillStyle = p.color; ctx.globalAlpha = p.alpha;
                 ctx.beginPath(); ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2); ctx.fill();
                 ctx.globalAlpha = 1.0;
             }
 
-            // Schadens-Texte
             for (let ft of floatTexts) {
                 ctx.save();
                 ctx.font = "bold 16px sans-serif"; ctx.fillStyle = ft.color;
@@ -806,25 +808,21 @@
                 ctx.shadowBlur = 18; ctx.shadowColor = "#fbbf24";
                 ctx.fillStyle = skin.color;
                 ctx.beginPath(); ctx.arc(player.x, player.y, player.radius, 0, Math.PI * 2); ctx.fill();
-                // Äußerer goldener Orbit-Ring
                 ctx.strokeStyle = "#fef08a"; ctx.lineWidth = 3;
                 ctx.beginPath(); ctx.arc(player.x, player.y, player.radius + 6, 0, Math.PI * 2); ctx.stroke();
             } else if (selectedSkin === 'plasma_core') {
                 ctx.shadowBlur = 18; ctx.shadowColor = skin.color;
                 ctx.fillStyle = skin.color;
                 ctx.beginPath(); ctx.arc(player.x, player.y, player.radius, 0, Math.PI * 2); ctx.fill();
-                // Leuchtender innerer Kern
                 ctx.fillStyle = skin.core;
                 ctx.beginPath(); ctx.arc(player.x, player.y, 8, 0, Math.PI * 2); ctx.fill();
             } else if (selectedSkin === 'galaxy_void') {
                 ctx.shadowBlur = 20; ctx.shadowColor = skin.color;
                 ctx.fillStyle = skin.color;
                 ctx.beginPath(); ctx.arc(player.x, player.y, player.radius, 0, Math.PI * 2); ctx.fill();
-                // Zweiter Ring
                 ctx.strokeStyle = skin.secondary; ctx.lineWidth = 3;
                 ctx.beginPath(); ctx.arc(player.x, player.y, player.radius - 4, 0, Math.PI * 2); ctx.stroke();
             } else {
-                // Standard & Einfache Skins
                 ctx.shadowBlur = 15; ctx.shadowColor = skin.color;
                 ctx.fillStyle = skin.color;
                 ctx.beginPath(); ctx.arc(player.x, player.y, player.radius, 0, Math.PI * 2); ctx.fill();
@@ -832,11 +830,9 @@
 
             ctx.restore();
 
-            // Glanz-Punkt auf dem Blob
             ctx.fillStyle = "rgba(255,255,255,0.4)";
             ctx.beginPath(); ctx.arc(player.x - 6, player.y - 6, 6, 0, Math.PI * 2); ctx.fill();
 
-            // Blickrichtung / Kanone
             ctx.strokeStyle = "#fff"; ctx.lineWidth = 4;
             ctx.beginPath(); ctx.moveTo(player.x, player.y);
             ctx.lineTo(player.x + Math.cos(player.angle) * 24, player.y + Math.sin(player.angle) * 24);
