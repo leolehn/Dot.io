@@ -173,6 +173,7 @@
         .shop-info p { margin: 0; font-size: 12px; color: #94a3b8; text-align: left; }
         .buy-btn {
             background: #f59e0b; color: #000; border: none; padding: 8px 16px; font-weight: bold; border-radius: 8px; cursor: pointer;
+            pointer-events: auto;
         }
         .buy-btn.equipped { background: #10b981; color: #fff; }
         .buy-btn.locked { background: #3b82f6; color: #fff; }
@@ -209,36 +210,36 @@
             <div class="stat-box">Kills: <span id="kill-count" style="color: #10b981;">0</span></div>
         </div>
 
-        <button id="pause-btn" onclick="togglePause()">⏸</button>
+        <button id="pause-btn">⏸</button>
 
         <div id="start-screen" class="screen">
             <h1>BLOB ARENA</h1>
             <p>Taktische Bots, bunte Gegner & Diep.io-Maus-Aiming!<br><br>Coins: <span id="menu-coins" style="color: #f59e0b; font-weight: bold;">0</span> 🪙</p>
-            <button class="btn" onclick="startGame()">SPIEL STARTEN</button>
-            <button class="btn btn-secondary" onclick="openShop()">SHOP</button>
+            <button class="btn" id="start-btn">SPIEL STARTEN</button>
+            <button class="btn btn-secondary" id="shop-btn">SHOP</button>
         </div>
 
         <div id="shop-screen" class="screen">
             <h1>SKIN SHOP</h1>
             <p>Deine Coins: <span id="shop-coins-display" style="color: #f59e0b; font-weight: bold;">0</span> 🪙</p>
             <div class="shop-list" id="shop-items-container"></div>
-            <button class="btn btn-secondary" onclick="closeShop()">ZURÜCK</button>
+            <button class="btn btn-secondary" id="back-shop-btn">ZURÜCK</button>
         </div>
 
         <div id="pause-screen" class="screen" style="display: none;">
             <h1>PAUSE</h1>
-            <button class="btn" onclick="resumeGame()">Weiter spielen</button>
-            <button class="btn btn-secondary" onclick="startGame()">Erneut Versuchen</button>
-            <button class="btn btn-secondary" onclick="openOptions()">Optionen</button>
-            <button class="btn btn-secondary" onclick="goHome()">Hauptmenü</button>
+            <button class="btn" id="resume-btn">Weiter spielen</button>
+            <button class="btn btn-secondary" id="retry-pause-btn">Erneut Versuchen</button>
+            <button class="btn btn-secondary" id="options-btn">Optionen</button>
+            <button class="btn btn-secondary" id="home-pause-btn">Hauptmenü</button>
         </div>
 
         <div id="end-screen" class="screen" style="display: none;">
             <h1 id="end-title">GAME OVER</h1>
             <p id="end-message">Du wurdest besiegt!</p>
             <div class="end-buttons">
-                <button class="icon-btn" id="retry-btn" onclick="startGame()" title="Retry">↺</button>
-                <button class="icon-btn" id="home-btn" onclick="goHome()" title="Home">⌂</button>
+                <button class="icon-btn" id="retry-btn" title="Retry">↺</button>
+                <button class="icon-btn" id="home-btn" title="Home">⌂</button>
             </div>
         </div>
 
@@ -630,6 +631,18 @@
             requestAnimationFrame(gameLoop);
         }
 
+        // Button Event-Listener (sorgt dafür, dass Klicks & Touches überall zuverlässig funktionieren)
+        document.getElementById("start-btn").addEventListener("pointerdown", startGame);
+        document.getElementById("shop-btn").addEventListener("pointerdown", openShop);
+        document.getElementById("back-shop-btn").addEventListener("pointerdown", closeShop);
+        document.getElementById("resume-btn").addEventListener("pointerdown", resumeGame);
+        document.getElementById("retry-pause-btn").addEventListener("pointerdown", startGame);
+        document.getElementById("options-btn").addEventListener("pointerdown", openOptions);
+        document.getElementById("home-pause-btn").addEventListener("pointerdown", goHome);
+        document.getElementById("retry-btn").addEventListener("pointerdown", startGame);
+        document.getElementById("home-btn").addEventListener("pointerdown", goHome);
+        document.getElementById("pause-btn").addEventListener("pointerdown", togglePause);
+
         function spawnEnemy() {
             let ex, ey, safe = false, attempts = 0;
             do {
@@ -668,7 +681,6 @@
             return false;
         }
 
-        // Taktische Sichtlinienprüfung für Bots
         function hasLineOfSight(x1, y1, x2, y2) {
             let steps = 12;
             for (let s = 1; s <= steps; s++) {
@@ -965,7 +977,7 @@
             let skin = skins[selectedSkin] || skins['default'];
             ctx.save();
 
-            // Spieler Laser / Blickrichtung (Standard weißer Balken)
+            // Spieler Laser / Blickrichtung
             ctx.strokeStyle = "#fff";
             ctx.lineWidth = 4;
             ctx.beginPath();
