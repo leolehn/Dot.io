@@ -791,7 +791,7 @@
                             en.hp -= 1;
                             hit = true;
                             createParticles(en.x, en.y, "#ff3366");
-                            addFloatText("-1 HP", en.x, en.y - 20, "#00f3ff");
+                            addFloatText("-1 HP", en.x, en.y - 20, "#ff4444");
 
                             if (en.hp <= 0) {
                                 enemies.splice(j, 1);
@@ -807,14 +807,220 @@
                     if (Math.hypot(b.x - player.x, b.y - player.y) < b.radius + player.radius) {
                         player.hp -= 1;
                         createParticles(player.x, player.y, "#00f3ff");
-                        addFloatText("-1 HP", player.x, player.y - 20, "#ff3366");
+                        addFloatText("-1 HP", player.x, player.y - 20, "#ff4444");
                         bullets.splice(i, 1);
                         if (player.hp <= 0) gameOver(false);
                         continue;
                     }
+                }
+            }
 
-                    let botHit = false;
-                    for (let j = enemies.length - 1; j >= 0; j--) {
-                        if (b.shooterIndex === j) continue;
-                        let en = enemies[j];
-                        if (Math.hypot(b.x - en.x, b.y - en
+            // Gegner KI aktualisieren
+            for (let i = enemies.length - 1; i >= 0; i--) {
+                let en = enemies[i];
+                let angleToPlayer = Math.atan2(player.y - en.y, player.x - en.x);
+                let distToPlayer = Math.hypot(player.x - en.x, player.y - en.y);
+
+                en.wanderAngle += (Math.random() - 0.5) * 0.4;
+
+                let moveX = 0, moveY = 0;
+                let hasLOS = hasLineOfSight(en.x, en.y, player.x, player.y);
+
+                if (!hasLOS) {
+                    let peekAngle = angleToPlayer + (Math.PI / 2) * en.strafeDir;
+                    moveX = Math.cos(peekAngle) * (en.speed * 0.8);
+                    moveY = Math.sin(peekAngle) * (en.speed * 0.8);
+                } else {
+                    if (distToPlayer > en.preferredDist + 20) {
+                        moveX = Math.cos(angleToPlayer) * en.speed;
+                        moveY = Math.sin(angleToPlayer) * en.speed;
+                    } else if (distToPlayer < en.preferredDist - 20) {
+                        moveX = -Math.cos(angleToPlayer) * (en.speed * 0.7);
+                        moveY = -Math.sin(angleToPlayer) * (en.speed * 0.7);
+                    } else {
+                        let strafeAngle = angleToPlayer + (Math.PI / 2) * en.strafeDir;
+                        moveX = Math.cos(strafeAngle) * (en.speed * 0.8);
+                        moveY = Math.sin(strafeAngle) * (en.speed * 0.8);
+                    }
+                }
+
+                moveWithCollision(en, moveX, moveY);
+                en.x = Math.max(en.radius, Math.min(worldWidth - en.radius, en.x));
+                en.y = Math.max(en.radius, Math.min(worldHeight - en.radius, en.y));
+
+                en.shootCooldown--;
+                if (en.shootCooldown <= 0 && hasLOS && distToPlayer < 400) {
+                    en.shootCooldown = Math.random() * 60 + 40;
+                    let shootAngle = angleToPlayer + (Math.random() - 0.5) * 0.2;
+                    bullets.push({
+                        x: en.x, y: en.y,
+                        dx: Math.cos(shootAngle) * 6, dy: Math.sin(shootAngle) * 6,
+                        radius: 5, color: en.color,
+                        fromPlayer: false, shooterIndex: i
+                    });
+                }
+            }
+
+            for (let i = particles.length - 1; i >= 0; i--) {
+                let p = particles[i];
+                p.x += p.dx; p.y += p.dy; p.alpha -= 0.03;
+                if (p.alpha <= 0) particles.splice(i, 1);
+            }
+
+            for (let i = floatTexts.length - 1; i >= 0; i--) {
+                let ft = floatTexts[i];
+                ft.y += ft.vy; ft.alpha -= 0.02;
+                if (ft.alpha <= 0) floatTexts.splice(i, 1);
+            }
+        }
+
+        function draw() {
+            ctx.fillStyle = "#0f172a";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.save();
+            let camX = canvas.width / 2 - player.x;
+            let camY = canvas.height / 2 - player.y;
+            ctx.translate(camX, camY);
+
+            // Raster
+            ctx.strokeStyle = "#1e293b";
+            ctx.lineWidth = 1;
+            const gridSize = 40;
+            for (let x = 0; x <= worldWidth; x += gridSize) {
+                ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, worldHeight); ctx.stroke();
+            }
+            for (let y = 0; y <= worldHeight; y += gridSize) {
+                ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(worldWidth, y); ctx.stroke();
+            }
+
+            // Hindernisse
+            for (let obs of currentMap) {
+                ctx.save();
+                if (obs.type === 'water') {
+                    ctx.shadowBlur = 15; ctx.shadowColor = "#00f3ff";
+                    ctx.fillStyle = "rgba(14, 116, 144, 0.65)";
+                    ctx.strokeStyle = "#00f3ff"; ctx.lineWidth = 3;
+                    ctx.beginPath(); ctx.roundRect(obs.x, obs.y, obs.w, obs.h, obs.r || 20); ctx.fill(); ctx.stroke();
+                } else {
+                    ctx.shadowBlur = 12; ctx.shadowColor = "#3b82f6";
+                    ctx.fillStyle = "#1e293b";
+                    ctx.strokeStyle = "#3b82f6"; ctx.lineWidth = 3;
+                    ctx.beginPath(); ctx.roundRect(obs.x, obs.y, obs.w, obs.h, 8); ctx.fill(); ctx.stroke();
+                }
+                ctx.restore();
+            }
+
+            // Weltbegrenzung
+            ctx.strokeStyle = "#334155";
+            ctx.lineWidth = 6;
+            ctx.strokeRect(0, 0, worldWidth, worldHeight);
+
+            // Gegner
+            for (let en of enemies) {
+                ctx.save();
+                ctx.shadowBlur = 12; ctx.shadowColor = en.color;
+                ctx.fillStyle = en.color;
+                ctx.beginPath(); ctx.arc(en.x, en.y, en.radius, 0, Math.PI * 2); ctx.fill();
+                ctx.restore();
+
+                ctx.fillStyle = "rgba(255,255,255,0.3)";
+                ctx.beginPath(); ctx.arc(en.x - 5, en.y - 5, 5, 0, Math.PI * 2); ctx.fill();
+                drawHealthBar(en.x, en.y - en.radius - 12, en.hp, en.maxHp);
+            }
+
+            // Spieler
+            drawPlayerSkin();
+            drawHealthBar(player.x, player.y - player.radius - 12, player.hp, player.maxHp);
+
+            // Kugeln
+            for (let b of bullets) {
+                ctx.save();
+                ctx.shadowBlur = 10; ctx.shadowColor = b.color;
+                ctx.fillStyle = b.color;
+                ctx.beginPath(); ctx.arc(b.x, b.y, b.radius, 0, Math.PI * 2); ctx.fill();
+                ctx.restore();
+            }
+
+            // Partikel
+            for (let p of particles) {
+                ctx.fillStyle = p.color; ctx.globalAlpha = p.alpha;
+                ctx.beginPath(); ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2); ctx.fill();
+                ctx.globalAlpha = 1.0;
+            }
+
+            // Floating Text
+            for (let ft of floatTexts) {
+                ctx.save();
+                ctx.font = "bold 16px sans-serif"; ctx.fillStyle = ft.color;
+                ctx.globalAlpha = ft.alpha; ctx.shadowBlur = 4; ctx.shadowColor = "#000";
+                ctx.fillText(ft.text, ft.x - 15, ft.y);
+                ctx.restore();
+            }
+
+            ctx.restore();
+        }
+
+        function drawPlayerSkin() {
+            let skin = skins[selectedSkin] || skins['default'];
+            ctx.save();
+
+            // Spieler Laser / Blickrichtung (Standard weißer Balken)
+            ctx.strokeStyle = "#fff";
+            ctx.lineWidth = 4;
+            ctx.beginPath();
+            ctx.moveTo(player.x, player.y);
+            ctx.lineTo(player.x + Math.cos(player.angle) * 30, player.y + Math.sin(player.angle) * 30);
+            ctx.stroke();
+            ctx.restore();
+
+            ctx.save();
+            if (selectedSkin === 'gold_royale') {
+                ctx.shadowBlur = 18; ctx.shadowColor = "#fbbf24";
+                ctx.fillStyle = skin.color;
+                ctx.beginPath(); ctx.arc(player.x, player.y, player.radius, 0, Math.PI * 2); ctx.fill();
+                ctx.strokeStyle = "#fef08a"; ctx.lineWidth = 3;
+                ctx.beginPath(); ctx.arc(player.x, player.y, player.radius + 6, 0, Math.PI * 2); ctx.stroke();
+            } else if (selectedSkin === 'plasma_core') {
+                ctx.shadowBlur = 18; ctx.shadowColor = skin.color;
+                ctx.fillStyle = skin.color;
+                ctx.beginPath(); ctx.arc(player.x, player.y, player.radius, 0, Math.PI * 2); ctx.fill();
+                ctx.fillStyle = skin.core;
+                ctx.beginPath(); ctx.arc(player.x, player.y, 8, 0, Math.PI * 2); ctx.fill();
+            } else if (selectedSkin === 'galaxy_void') {
+                ctx.shadowBlur = 20; ctx.shadowColor = skin.color;
+                ctx.fillStyle = skin.color;
+                ctx.beginPath(); ctx.arc(player.x, player.y, player.radius, 0, Math.PI * 2); ctx.fill();
+                ctx.strokeStyle = skin.secondary; ctx.lineWidth = 3;
+                ctx.beginPath(); ctx.arc(player.x, player.y, player.radius - 4, 0, Math.PI * 2); ctx.stroke();
+            } else {
+                ctx.shadowBlur = 15; ctx.shadowColor = skin.color;
+                ctx.fillStyle = skin.color;
+                ctx.beginPath(); ctx.arc(player.x, player.y, player.radius, 0, Math.PI * 2); ctx.fill();
+            }
+            ctx.restore();
+
+            ctx.fillStyle = "rgba(255,255,255,0.4)";
+            ctx.beginPath(); ctx.arc(player.x - 6, player.y - 6, 6, 0, Math.PI * 2); ctx.fill();
+        }
+
+        function drawHealthBar(x, y, current, max) {
+            const barWidth = 40; const barHeight = 6;
+            ctx.fillStyle = "rgba(0,0,0,0.6)";
+            ctx.fillRect(x - barWidth / 2, y, barWidth, barHeight);
+            const healthWidth = (current / max) * barWidth;
+            ctx.fillStyle = current > 3 ? "#10b981" : "#ef4444";
+            ctx.fillRect(x - barWidth / 2, y, healthWidth, barHeight);
+        }
+
+        function gameLoop() {
+            if (!gameRunning) return;
+            if (!isPaused) {
+                update();
+                draw();
+                requestAnimationFrame(gameLoop);
+            }
+        }
+    </script>
+</body>
+</html>
