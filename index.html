@@ -647,7 +647,7 @@
                 x: ex, y: ey,
                 radius: 20,
                 hp: 10, maxHp: 10,
-                speed: 1.2 + Math.random() * 1.5,
+                speed: 3.2 + Math.random() * 1.3, // Bots sind jetzt deutlich schneller (3.2 bis 4.5)
                 preferredDist: 60 + Math.random() * 100,
                 strafeDir: Math.random() < 0.5 ? 1 : -1,
                 shootCooldown: Math.random() * 60 + 30,
@@ -777,7 +777,7 @@
             let targetVx = moveX * player.speed;
             let targetVy = moveY * player.speed;
 
-            // Trägheit einbauen (0.2 sorgt für geschmeidiges Beschleunigen/Abbremsen)
+            // Trägheit einbauen
             player.vx += (targetVx - player.vx) * 0.2;
             player.vy += (targetVy - player.vy) * 0.2;
 
@@ -788,7 +788,7 @@
                 moveWithCollision(player, player.vx, player.vy);
             }
 
-            // Winkel weich hinterherziehen (0.2 ist hier der Faktor für die Drehung)
+            // Winkel weich hinterherziehen
             player.angle = lerpAngle(player.angle, targetAngle, 0.2);
 
             player.x = Math.max(player.radius, Math.min(worldWidth - player.radius, player.x));
@@ -895,19 +895,19 @@
                 let moveX = 0, moveY = 0;
                 if (!hasLOS) {
                     let peekAngle = angleToTarget + (Math.PI / 2) * en.strafeDir;
-                    moveX = Math.cos(peekAngle) * (en.speed * 0.9);
-                    moveY = Math.sin(peekAngle) * (en.speed * 0.9);
+                    moveX = Math.cos(peekAngle) * (en.speed * 0.95);
+                    moveY = Math.sin(peekAngle) * (en.speed * 0.95);
                 } else {
                     if (closestDist > en.preferredDist + 20) {
-                        moveX = Math.cos(angleToTarget) * (en.speed * 0.8);
-                        moveY = Math.sin(angleToTarget) * (en.speed * 0.8);
+                        moveX = Math.cos(angleToTarget) * en.speed; // Volle Geschwindigkeit beim Verfolgen
+                        moveY = Math.sin(angleToTarget) * en.speed;
                     } else if (closestDist < en.preferredDist - 20) {
-                        moveX = -Math.cos(angleToTarget) * (en.speed * 0.6);
-                        moveY = -Math.sin(angleToTarget) * (en.speed * 0.6);
+                        moveX = -Math.cos(angleToTarget) * (en.speed * 0.8);
+                        moveY = -Math.sin(angleToTarget) * (en.speed * 0.8);
                     } else {
                         let strafeAngle = angleToTarget + (Math.PI / 2) * en.strafeDir;
-                        moveX = Math.cos(strafeAngle) * (en.speed * 0.75);
-                        moveY = Math.sin(strafeAngle) * (en.speed * 0.75);
+                        moveX = Math.cos(strafeAngle) * (en.speed * 0.9);
+                        moveY = Math.sin(strafeAngle) * (en.speed * 0.9);
                     }
                 }
 
